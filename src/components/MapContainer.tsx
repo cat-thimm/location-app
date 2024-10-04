@@ -1,15 +1,21 @@
+import {useEffect, useRef} from "react";
+import mapboxgl from 'mapbox-gl';
+
 import './MapContainer.css';
+
 import {getMap} from "../../mapbox";
+import useMapbox from "../hooks/useMapbox";
 
 interface ContainerProps {
 }
 
 const MapContainer: React.FC<ContainerProps> = () => {
 
-    getMap('map')
+    useMapbox("map");
 
     return (
-        <div id="map" className="map">
+        <div id="map-container">
+            <div id="map" />
         </div>
     );
 };
