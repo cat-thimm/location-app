@@ -1,6 +1,8 @@
 import mapboxgl, {NavigationControl} from 'mapbox-gl/dist/mapbox-gl.js';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2F0aXRoaW1tIiwiYSI6ImNtMXU3N2FodDA5bmIycG9udXQwZWR2OTYifQ.NXttkfK70Y3thTCSZoBFDg';
+
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
+
 
 export const getMap = (containerId: string, lat?: number, lng?: number) => {
     const map = new mapboxgl.Map({
