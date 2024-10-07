@@ -1,0 +1,13 @@
+{
+  "locations": [
+    {
+      "id": "1",
+      "name": "Indian Restaurant",
+      "latitude": "10",
+      "longitude": "10",
+      "description": "Love this place",
+      "category": "RESTAURANT",
+      "visitDate": "2024-08-01"
+    }
+  ]
+}
