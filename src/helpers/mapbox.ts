@@ -1,6 +1,5 @@
 import mapboxgl, {NavigationControl} from 'mapbox-gl/dist/mapbox-gl.js';
 import {requestLocation} from "./permissions";
-import {Capacitor} from "@capacitor/core";
 
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
@@ -18,11 +17,6 @@ export const getMap = async (containerId: string) => {
     })
 
     map.addControl(new NavigationControl());
-
-    map.on("load", async () => {
-        window.dispatchEvent(new Event("resize"));
-    });
-
 
     return map
 }

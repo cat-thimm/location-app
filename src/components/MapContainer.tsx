@@ -9,9 +9,7 @@ const MapContainer: React.FC<ContainerProps> = () => {
     useMapbox("map");
 
     return (
-        <div id="map-container">
-            <div id="map" />
-        </div>
+        <div id="map"/>
     );
 };
 
