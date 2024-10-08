@@ -12,6 +12,8 @@ import {requestLocation} from "../helpers/permissions";
 const useMapbox = (containerId: string) => {
     const mapRef = useRef<mapboxgl.Map | null>(null);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const [clickedLocation, setClickedLocation] = useState<{
         latitude: number,
         longitude: number,
@@ -46,6 +48,7 @@ const useMapbox = (containerId: string) => {
 
 
             mapRef.current.on('click', async (event) => {
+                setIsLoading(true);
                 if (!savedLocation) {
 
                     const {lng, lat} = event.lngLat;
@@ -63,6 +66,7 @@ const useMapbox = (containerId: string) => {
                             .addTo(mapRef.current);
                     }
                 }
+                setIsLoading(false);
             });
 
 
@@ -79,7 +83,7 @@ const useMapbox = (containerId: string) => {
 
     }, [containerId]);
 
-    return clickedLocation;
+    return {clickedLocation, isLoading};
 };
 
 const getAddressFromCoordinates = async (lng: number, lat: number): Promise<string> => {

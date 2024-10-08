@@ -13,6 +13,8 @@ export interface AddLocationProps {
         longitude: number;
         address: string;
     };
+    selectedType: LocationTypes | null;
+    setSelectedType: (type: LocationTypes | null) => void;
 }
 
 export interface MenuItem {

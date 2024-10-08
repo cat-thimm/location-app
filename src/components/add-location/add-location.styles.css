@@ -1,6 +1,6 @@
 .add-location {
     background-color: white;
-    z-index: 100;
+    z-index: 10;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -17,10 +17,15 @@
     margin: 0;
 }
 
+.add-location-header-wrapper {
+    padding: 16px;
+}
+
 .add-location-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
 }
 
 
@@ -29,13 +34,27 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    cursor: pointer;
+    border-radius: 8px;
+    justify-content: space-between;
+}
+
+.add-location-menu-item:hover {
+    background-color: rgba(217, 217, 217, 0.25);
+}
+
+.add-location-menu-item-label {
+    display: flex;
     column-gap: 12px;
 }
 
 .add-location-menu-wrapper {
+    padding-top: 8px;
     border-top: 1px solid #D9D9D9;
 }
 
 p{
-    margin: 0 0 8px 0;
+    margin: 0;
+    font-size: 14px;
 }
