@@ -34,6 +34,6 @@ export const AddLocation = ({menuItems, location, selectedType, setSelectedType}
                     }
                 </div>
             })}
-        </div>
-    </IonItemSliding>
+</div>
+</IonItemSliding>
 }

@@ -38,10 +38,15 @@
     cursor: pointer;
     border-radius: 8px;
     justify-content: space-between;
+    transition: background-color 0.3s ease;
 }
 
 .add-location-menu-item:hover {
     background-color: rgba(217, 217, 217, 0.25);
+}
+
+.add-location-menu-item:active {
+    background-color: rgba(217, 217, 217, 0.75);
 }
 
 .add-location-menu-item-label {
