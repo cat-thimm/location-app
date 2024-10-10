@@ -25,7 +25,6 @@ const useMapbox = (containerId: string) => {
     } | null>(null)
 
     useEffect(() => {
-
         /**
          * Asynchronously sets up the Mapbox map.
          * This function initializes the map instance and adds necessary controls.
@@ -54,13 +53,12 @@ const useMapbox = (containerId: string) => {
             mapRef.current.on('click', async (event) => {
                 setIsLoading(true);
 
-                console.log('>>> location', location)
-
                 if (clickedLocation !== null) {
                     setClickedLocation(null);
                     setIsLoading(false);
 
                     marker.remove()
+
                     console.log('loading false')
                     return;
                 } else {
@@ -74,8 +72,6 @@ const useMapbox = (containerId: string) => {
                             .setLngLat({lat, lng})
                             .addTo(mapRef.current);
                     }
-
-
                     setIsLoading(false);
                 }
             });
@@ -132,7 +128,6 @@ const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
         locations.forEach((location: any) => {
 
             if (map) {
-
                 drawMarker(map, {
                     coordinates: {
                         lat: location.latitude,
@@ -141,7 +136,7 @@ const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
                     properties: {
                         title: location.name,
                         comment: location.description,
-                        locationType: location.category,
+                        locationType: location.type,
                     },
                 })
             }

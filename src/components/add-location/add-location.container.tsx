@@ -6,6 +6,7 @@ import {drawMarker} from "../../helpers/mapbox";
 
 import {AddLocation} from "./add-location.markup";
 import {AddLocationContainerProps, LocationTypes, MenuItem} from "./add-location.types";
+import {storeLocation} from "../../helpers/storage";
 
 const MENU_ITEMS: MenuItem[] = [
     {id: "1", type: LocationTypes.RESTAURANT, title: "Restaurant", description: "Add restaurants, cafes and others."},
@@ -32,14 +33,28 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
         }
     }
 
-    const onSaveForm = (): void => {
+    const onSaveForm = async (): Promise<void> => {
         if (mapRef?.current && selectedType !== null) {
             drawMarker(mapRef?.current, {
                 coordinates: {lat: location.latitude, lon: location.longitude},
                 properties: {title: locationName, comment: locationComment, locationType: selectedType},
             })
 
+            await storeLocation({
+                id: Math.random().toString(),
+                type: selectedType,
+                description: locationComment,
+                latitude: location.latitude,
+                longitude: location.longitude,
+                address: location.address,
+                name: locationName,
+                visitDate: new Date().toLocaleDateString(),
+            })
+
             setClickedLocation(null)
+            setSelectedType(null)
+            setLocationName("")
+            setLocationComment("")
         }
     }
 

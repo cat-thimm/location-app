@@ -3,9 +3,7 @@ import {IonPage} from '@ionic/react';
 
 import MapContainer from '../components/map/map.container';
 
-import './Home.css';
-
-const Home: React.FC = () => {
+const HomeContainer: React.FC = () => {
     return (
         <IonPage>
             <MapContainer/>
@@ -13,4 +11,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default HomeContainer;
