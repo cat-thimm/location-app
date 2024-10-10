@@ -3,6 +3,7 @@
 import legacy from '@vitejs/plugin-legacy'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import * as path from "node:path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,5 +15,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
+  },
+  resolve: {
+    alias: {
+      Icons: path.resolve(__dirname, 'src/assets/icons/')
+    }
   }
 })

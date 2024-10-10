@@ -1,7 +1,7 @@
 import {Redirect, Route} from 'react-router-dom';
 import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
-import Home from './pages/Home';
+import HomeContainer from './pages/home.container';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,38 +34,20 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 import {Preferences} from "@capacitor/preferences";
 import {useEffect} from "react";
+import {initializeStorage} from "./helpers/storage";
 
 setupIonicReact();
 
 const App: React.FC = () => {
     useEffect(() => {
-        const initializeApp = async () => {
-            const {value: isInitialized} = await Preferences.get({key: 'isInitialized'});
-
-            if (!isInitialized) {
-                const response = await fetch('./src/data/locations.json');
-                const initialData = await response.json();
-
-                await Preferences.set({
-                    key: 'mapData',
-                    value: JSON.stringify(initialData)
-                });
-
-                await Preferences.set({
-                    key: 'isInitialized',
-                    value: 'true'
-                });
-            }
-        };
-
-        initializeApp();
+        initializeStorage().then();
     }, []);
 
     return (<IonApp>
         <IonReactRouter>
             <IonRouterOutlet>
                 <Route exact path="/home">
-                    <Home/>
+                    <HomeContainer/>
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/home"/>
