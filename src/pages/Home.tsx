@@ -1,17 +1,16 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import React from "react";
+import {IonPage} from '@ionic/react';
+
 import MapContainer from '../components/map/map.container';
+
 import './Home.css';
 
 const Home: React.FC = () => {
-  return (
-    <IonPage>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-        </IonHeader>
-        <MapContainer />
-      </IonContent>
-    </IonPage>
-  );
+    return (
+        <IonPage>
+            <MapContainer/>
+        </IonPage>
+    );
 };
 
 export default Home;

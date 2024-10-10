@@ -13,7 +13,7 @@ interface ContainerProps {
 const MapContainer: React.FC<ContainerProps> = () => {
     // Invoke the custom `useMapbox` hook, passing the ID of the map container
     // This will initialize the Mapbox instance and associate it with the div#map element
-    const {clickedLocation, isLoading} = useMapbox("map");
+    const {clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
 
 
     return (  <>
@@ -26,7 +26,7 @@ const MapContainer: React.FC<ContainerProps> = () => {
 
             <div id="map" className={isLoading ? 'map-loading' : ''} />
 
-            {clickedLocation && <AddLocationContainer location={clickedLocation} />}
+            {clickedLocation && <AddLocationContainer location={clickedLocation} mapRef={mapRef} setClickedLocation={setClickedLocation} />}
         </>
     );
 };

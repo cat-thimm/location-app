@@ -1,9 +1,17 @@
+import mapboxgl from "mapbox-gl";
+
 export interface AddLocationContainerProps {
     location: {
         latitude: number;
         longitude: number;
         address: string;
     }
+    mapRef?: React.RefObject<mapboxgl.Map>;
+    setClickedLocation: (location: {
+        latitude: number;
+        longitude: number;
+        address: string;
+    } | null) => void
 }
 
 export interface AddLocationProps {
@@ -15,6 +23,13 @@ export interface AddLocationProps {
     };
     selectedType: LocationTypes | null;
     setSelectedType: (type: LocationTypes | null) => void;
+    showDescriptionForm: boolean;
+    setShowDescriptionForm: (showDescriptionForm: boolean) => void;
+    locationName: string;
+    onChangeLocationName: (event: any) => void;
+    locationComment: string;
+    onChangeLocationComment: (event: any) => void;
+    onSaveForm: () => void;
 }
 
 export interface MenuItem {

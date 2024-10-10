@@ -1,27 +1,32 @@
 import React from "react";
-import {ReactSVG} from "react-svg";
-import {IonButton, IonItemSliding, IonLabel} from '@ionic/react';
+import {IonIcon, IonInput, IonItem, IonLabel, IonTextarea} from '@ionic/react';
+
+import {Menu} from "../menu/menu.markup";
 
 import {AddLocationProps} from "./add-location.types";
 import "./add-location.styles.css"
 
-
-export const AddLocation = ({menuItems, location, selectedType, setSelectedType}: AddLocationProps) => {
-    return <IonItemSliding className="add-location">
-        <div className="add-location-header-wrapper">
-            <div className="add-location-header">
-                <h1 className="add-location-h1">Add new location</h1>
-                <IonButton fill="clear" disabled={selectedType === null}>Next</IonButton>
-            </div>
-            <p>
-                {location.address}
-            </p>
-        </div>
-        <div className="add-location-menu-wrapper ">
-            {menuItems.map(item => {
+export const AddLocation = ({
+                                menuItems,
+                                location,
+                                selectedType,
+                                setSelectedType,
+                                showDescriptionForm,
+                                setShowDescriptionForm,
+                                onChangeLocationName,
+                                locationName,
+                                onChangeLocationComment,
+                                locationComment,
+                                onSaveForm
+                            }: AddLocationProps) => {
+    return <div className="add-location">
+        {!showDescriptionForm ?
+            <Menu headline={"Add new location"} paragraphText={location.address} disabled={selectedType === null}
+                  buttonText={"Next"} onClick={() => setShowDescriptionForm(true)}>{menuItems.map(item => {
                 return <div className="add-location-menu-item" key={item.id} onClick={() => setSelectedType(item.type)}>
                     <div className="add-location-menu-item-label">
-                        <ReactSVG
+                        <IonIcon
+                            aria-hidden="true"
                             src={`/assets/icons/${item.type}.svg`}/>
                         <IonLabel>
                             <h1 style={{fontSize: "16px"}}>{item.title}</h1>
@@ -29,11 +34,42 @@ export const AddLocation = ({menuItems, location, selectedType, setSelectedType}
                         </IonLabel>
                     </div>
                     {
-                        selectedType === item.type && <ReactSVG
+                        selectedType === item.type && <IonIcon
                             src={`/assets/icons/check.svg`}/>
                     }
                 </div>
-            })}
-</div>
-</IonItemSliding>
+            })}</Menu> :
+            <Menu headline={"Add description"} paragraphText={location.address} disabled={locationName === ""}
+                  buttonText={"Save"} onClick={onSaveForm}>
+                <div className="add-location-menu-item" onClick={() => {
+                    setShowDescriptionForm(false)
+                }}>
+                    <div className="add-location-menu-item-label" style={{alignItems: "center"}}>
+                        <IonIcon
+                            aria-hidden="true"
+                            src={`/assets/icons/${selectedType}.svg`}/>
+                        <IonLabel>
+                            {
+                                menuItems.find(item => item.type === selectedType)?.title
+                            }
+                        </IonLabel>
+                    </div>
+                    <IonIcon
+                        aria-hidden="true"
+                        src={`/assets/icons/renew.svg`}/>
+                </div>
+                <IonItem>
+                    <IonInput type="text" label="Location Name" labelPlacement="stacked"
+                              placeholder="Please enter a name..." value={locationName}
+                              onIonInput={onChangeLocationName} required></IonInput>
+                </IonItem>
+
+                <IonItem>
+                    <IonTextarea label="(Optional) Comment" labelPlacement="stacked"
+                                 placeholder="Enter a comment for this location ..." value={locationComment}
+                                 onIonInput={onChangeLocationComment}></IonTextarea>
+                </IonItem>
+            </Menu>
+        }
+    </div>
 }

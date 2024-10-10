@@ -1,9 +1,10 @@
 import {useEffect, useRef, useState} from "react";
 import mapboxgl, {Marker} from 'mapbox-gl';
-
-import {getMap} from "../helpers/mapbox";
-import {requestLocation} from "../helpers/permissions";
 import {Preferences} from "@capacitor/preferences";
+
+import {drawMarker, getMap} from "../helpers/mapbox";
+
+import "../style.css"
 
 /**
  * Custom hook to initialize and manage a Mapbox map instance.
@@ -13,6 +14,8 @@ import {Preferences} from "@capacitor/preferences";
 const useMapbox = (containerId: string) => {
     const mapRef = useRef<mapboxgl.Map | null>(null);
 
+    const marker = new mapboxgl.Marker()
+
     const [isLoading, setIsLoading] = useState(false);
 
     const [clickedLocation, setClickedLocation] = useState<{
@@ -20,9 +23,6 @@ const useMapbox = (containerId: string) => {
         longitude: number,
         address: string
     } | null>(null)
-
-    const [currentMarker, setCurrentMarker] = useState<Marker | null>(null);
-
 
     useEffect(() => {
 
@@ -54,23 +54,30 @@ const useMapbox = (containerId: string) => {
             mapRef.current.on('click', async (event) => {
                 setIsLoading(true);
 
-                const {lng, lat} = event.lngLat;
-                const address = await getAddressFromCoordinates(lng, lat);
+                console.log('>>> location', location)
 
-                setClickedLocation({latitude: lat, longitude: lng, address});
+                if (clickedLocation !== null) {
+                    setClickedLocation(null);
+                    setIsLoading(false);
 
-                if (mapRef.current) {
+                    marker.remove()
+                    console.log('loading false')
+                    return;
+                } else {
+                    const {lng, lat} = event.lngLat;
+                    const address = await getAddressFromCoordinates(lng, lat);
 
-                    // Set marker options.
-                    const marker = new mapboxgl.Marker({
-                        color: "#FFFFFF",
-                    }).setLngLat([lng, lat])
-                        .addTo(mapRef.current);
+                    setClickedLocation({latitude: lat, longitude: lng, address});
 
-                    setCurrentMarker(marker);
+                    if (mapRef.current) {
+                        marker
+                            .setLngLat({lat, lng})
+                            .addTo(mapRef.current);
+                    }
+
+
+                    setIsLoading(false);
                 }
-
-                setIsLoading(false);
             });
 
 
@@ -87,7 +94,7 @@ const useMapbox = (containerId: string) => {
 
     }, [containerId]);
 
-    return {clickedLocation, isLoading};
+    return {clickedLocation, setClickedLocation, isLoading, mapRef};
 };
 
 
@@ -125,10 +132,18 @@ const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
         locations.forEach((location: any) => {
 
             if (map) {
-                new mapboxgl.Marker({
-                    color: "#FFFFFF",
-                }).setLngLat([location.longitude, location.latitude])
-                    .addTo(map);
+
+                drawMarker(map, {
+                    coordinates: {
+                        lat: location.latitude,
+                        lng: location.longitude,
+                    },
+                    properties: {
+                        title: location.name,
+                        comment: location.description,
+                        locationType: location.category,
+                    },
+                })
             }
         })
     }

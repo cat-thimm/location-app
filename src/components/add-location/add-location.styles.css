@@ -11,24 +11,6 @@
     border: 1px solid #D9D9D9;
 }
 
-.add-location-h1{
-    font-size: 16px;
-    font-weight: 500;
-    margin: 0;
-}
-
-.add-location-header-wrapper {
-    padding: 16px;
-}
-
-.add-location-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-}
-
-
 .add-location-menu-item {
     padding: 12px 16px;
     display: flex;
@@ -54,12 +36,6 @@
     column-gap: 12px;
 }
 
-.add-location-menu-wrapper {
-    padding-top: 8px;
-    border-top: 1px solid #D9D9D9;
-}
-
-p{
-    margin: 0;
-    font-size: 14px;
+ion-icon {
+    font-size: 24px;
 }
