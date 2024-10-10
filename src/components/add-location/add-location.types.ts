@@ -5,7 +5,7 @@ export interface AddLocationContainerProps {
         latitude: number;
         longitude: number;
         address: string;
-    }
+    } | null
     mapRef?: React.RefObject<mapboxgl.Map>;
     setClickedLocation: (location: {
         latitude: number;
@@ -20,7 +20,12 @@ export interface AddLocationProps {
         latitude: number;
         longitude: number;
         address: string;
-    };
+    } | null;
+    setClickedLocation: (location: {
+        latitude: number;
+        longitude: number;
+        address: string;
+    } | null) => void
     selectedType: LocationTypes | null;
     setSelectedType: (type: LocationTypes | null) => void;
     showDescriptionForm: boolean;

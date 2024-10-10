@@ -49,31 +49,21 @@ const useMapbox = (containerId: string) => {
 
             }
 
-
             mapRef.current.on('click', async (event) => {
                 setIsLoading(true);
 
-                if (clickedLocation !== null) {
-                    setClickedLocation(null);
-                    setIsLoading(false);
+                const {lng, lat} = event.lngLat;
+                const address = await getAddressFromCoordinates(lng, lat);
 
-                    marker.remove()
+                setClickedLocation({latitude: lat, longitude: lng, address});
 
-                    console.log('loading false')
-                    return;
-                } else {
-                    const {lng, lat} = event.lngLat;
-                    const address = await getAddressFromCoordinates(lng, lat);
-
-                    setClickedLocation({latitude: lat, longitude: lng, address});
-
-                    if (mapRef.current) {
-                        marker
-                            .setLngLat({lat, lng})
-                            .addTo(mapRef.current);
-                    }
-                    setIsLoading(false);
+                if (mapRef.current) {
+                    marker
+                        .setLngLat({lat, lng})
+                        .addTo(mapRef.current);
                 }
+
+                setIsLoading(false);
             });
 
 

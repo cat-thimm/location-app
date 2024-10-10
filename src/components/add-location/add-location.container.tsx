@@ -34,7 +34,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
     }
 
     const onSaveForm = async (): Promise<void> => {
-        if (mapRef?.current && selectedType !== null) {
+        if (mapRef?.current && selectedType !== null && location !== null) {
             drawMarker(mapRef?.current, {
                 coordinates: {lat: location.latitude, lon: location.longitude},
                 properties: {title: locationName, comment: locationComment, locationType: selectedType},
@@ -55,6 +55,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
             setSelectedType(null)
             setLocationName("")
             setLocationComment("")
+            setShowDescriptionForm(false)
         }
     }
 
@@ -69,5 +70,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
                         locationComment={locationComment}
                         onChangeLocationComment={onChangeLocationComment}
                         onSaveForm={onSaveForm}
+                        setClickedLocation={setClickedLocation}
     />
+
 }

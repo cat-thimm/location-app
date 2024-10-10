@@ -16,17 +16,19 @@ const MapContainer: React.FC<ContainerProps> = () => {
     const {clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
 
 
-    return (  <>
+    return (<>
             {isLoading && (
                 <>
-                    <IonSpinner className="spinner" name="circular" color="light" />
-                    <div className="map-overlay" /> {/* Add the overlay when loading */}
+                    <IonSpinner className="spinner" name="circular" color="light"/>
+                    <div className="map-overlay"/>
+                    {/* Add the overlay when loading */}
                 </>
             )}
 
-            <div id="map" className={isLoading ? 'map-loading' : ''} />
+            <div id="map" className={isLoading ? 'map-loading' : ''}/>
 
-            {clickedLocation && <AddLocationContainer location={clickedLocation} mapRef={mapRef} setClickedLocation={setClickedLocation} />}
+            <AddLocationContainer location={clickedLocation} mapRef={mapRef}
+                                  setClickedLocation={setClickedLocation}/>
         </>
     );
 };

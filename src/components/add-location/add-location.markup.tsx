@@ -1,5 +1,5 @@
 import React from "react";
-import {IonIcon, IonInput, IonItem, IonLabel, IonTextarea} from '@ionic/react';
+import {IonIcon, IonInput, IonItem, IonLabel, IonModal, IonTextarea} from '@ionic/react';
 
 import {Menu} from "../menu/menu.markup";
 
@@ -17,11 +17,20 @@ export const AddLocation = ({
                                 locationName,
                                 onChangeLocationComment,
                                 locationComment,
-                                onSaveForm
+                                onSaveForm,
+                                setClickedLocation
                             }: AddLocationProps) => {
-    return <div className="add-location">
+    return <IonModal className="add-location"
+                     initialBreakpoint={0.6}
+                     breakpoints={[0.2, 0.6]}
+                     backdropDismiss={true}
+                     backdropBreakpoint={0.3}
+                     isOpen={location !== null}
+                     onIonModalDidDismiss={() => {
+                         setClickedLocation(null)
+                     }}>
         {!showDescriptionForm ?
-            <Menu headline={"Add new location"} paragraphText={location.address} disabled={selectedType === null}
+            <Menu headline={"Add new location"} paragraphText={location?.address ?? ""} disabled={selectedType === null}
                   buttonText={"Next"} onClick={() => setShowDescriptionForm(true)}>{menuItems.map(item => {
                 return <div className="add-location-menu-item" key={item.id} onClick={() => setSelectedType(item.type)}>
                     <div className="add-location-menu-item-label">
@@ -39,7 +48,7 @@ export const AddLocation = ({
                     }
                 </div>
             })}</Menu> :
-            <Menu headline={"Add description"} paragraphText={location.address} disabled={locationName === ""}
+            <Menu headline={"Add description"} paragraphText={location?.address ?? ""} disabled={locationName === ""}
                   buttonText={"Save"} onClick={onSaveForm}>
                 <div className="add-location-menu-item" onClick={() => {
                     setShowDescriptionForm(false)
@@ -71,5 +80,5 @@ export const AddLocation = ({
                 </IonItem>
             </Menu>
         }
-    </div>
+    </IonModal>
 }
