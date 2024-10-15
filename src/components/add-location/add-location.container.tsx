@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useMemo,  useState} from "react";
 import {IonInputCustomEvent, IonTextareaCustomEvent, TextareaInputEventDetail} from "@ionic/core/dist/types/components";
 import {InputInputEventDetail} from "@ionic/react";
 
@@ -7,6 +7,7 @@ import {drawMarker} from "../../helpers/mapbox";
 import {AddLocation} from "./add-location.markup";
 import {AddLocationContainerProps, LocationTypes, MenuItem} from "./add-location.types";
 import {storeLocation} from "../../helpers/storage";
+import mapboxgl from "mapbox-gl";
 
 const MENU_ITEMS: MenuItem[] = [
     {id: "1", type: LocationTypes.RESTAURANT, title: "Restaurant", description: "Add restaurants, cafes and others."},
@@ -21,6 +22,26 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
     const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
     const [locationName, setLocationName] = useState("")
     const [locationComment, setLocationComment] = useState("")
+
+    // Memoize the marker instance, so it's only created when location or mapRef changes
+    const marker = useMemo(() => new mapboxgl.Marker(), []);
+
+    useEffect(() => {
+        if (mapRef && mapRef.current) {
+            if (location) {
+                marker
+                    .setLngLat({lat: location.latitude, lon: location.longitude})
+                    .addTo(mapRef.current);
+            } else {
+                marker.remove();
+            }
+        }
+
+        // Cleanup: remove the marker when the component unmounts or location changes
+        return () => {
+            marker.remove()
+        };
+    }, [location, mapRef, marker]);
 
     const onChangeLocationName = (e: IonInputCustomEvent<InputInputEventDetail>) => {
         if (e.detail.value) {
@@ -51,6 +72,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
                 visitDate: new Date().toLocaleDateString(),
             })
 
+            // Reset Form and Location
             setClickedLocation(null)
             setSelectedType(null)
             setLocationName("")

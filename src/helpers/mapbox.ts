@@ -4,6 +4,7 @@ import {LngLatLike} from "mapbox-gl";
 import {LocationTypes} from "../components/add-location/add-location.types";
 
 import {requestLocation} from "./permissions";
+import {Location} from "../types/location";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -21,6 +22,19 @@ export const getMap = async (containerId: string) => {
     map.addControl(new NavigationControl());
 
     return map
+}
+
+export const cleanUpMapAndDrawMarker = (locations: Location[], newLocation: Location) => {
+    const existingMarkerIndex = locations.findIndex(location => {
+
+        return location.longitude === newLocation.longitude && location.latitude === newLocation.latitude;
+    });
+
+    // If a marker is found at the same location, remove it
+    if (existingMarkerIndex !== -1) {
+         // Remove the marker from the map
+         // Remove it from the array
+    }
 }
 
 
@@ -57,17 +71,20 @@ export const drawMarker = (map: mapboxgl.Map, location: {
     el.style.background = `${backgroundColor} no-repeat center`;
     el.style.backgroundImage = `url('/assets/icons/${location.properties.locationType}.svg')`
 
-
     // Create a Mapbox marker with the element containing the IonIcon
     new mapboxgl.Marker(el)
         .setLngLat(location.coordinates)
-        .setPopup(
-            new mapboxgl.Popup({ offset: 25 }) // Add popups
-                .setHTML(
-                    `<h3>${location.properties.title}</h3><p>${location.properties.comment}</p>`
-                )
-        )
+        // .setPopup(
+        //     new mapboxgl.Popup({ offset: 25 }) // Add popups
+        //         .setHTML(
+        //             `<h3>${location.properties.title}</h3><p>${location.properties.comment}</p>`
+        //         )
+        // ) TODO: MN-5579
         .addTo(map);
+
+    el.addEventListener('click', (event) => {
+        event.stopPropagation(); // TODO: MN-5579 This prevents the map's click listener from being triggered, solve
+    });
 };
 
 

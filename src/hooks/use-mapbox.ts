@@ -14,10 +14,7 @@ import "../style.css"
 const useMapbox = (containerId: string) => {
     const mapRef = useRef<mapboxgl.Map | null>(null);
 
-    const marker = new mapboxgl.Marker()
-
     const [isLoading, setIsLoading] = useState(false);
-
     const [clickedLocation, setClickedLocation] = useState<{
         latitude: number,
         longitude: number,
@@ -56,12 +53,6 @@ const useMapbox = (containerId: string) => {
                 const address = await getAddressFromCoordinates(lng, lat);
 
                 setClickedLocation({latitude: lat, longitude: lng, address});
-
-                if (mapRef.current) {
-                    marker
-                        .setLngLat({lat, lng})
-                        .addTo(mapRef.current);
-                }
 
                 setIsLoading(false);
             });
@@ -114,6 +105,7 @@ const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
 
     if (mapData.value) {
         const locations = JSON.parse(mapData?.value).locations
+
 
         locations.forEach((location: any) => {
 

@@ -9,11 +9,9 @@ export async function requestLocation(): Promise<Position | null> {
     }
 
     if (status.location === 'granted') {
-        const coordinates = await Geolocation.getCurrentPosition();
-        console.log('Current position:', coordinates);
-        return coordinates;
+        return await Geolocation.getCurrentPosition();
     } else {
-        console.log('Location permission not granted');
+        console.warn('Location permission not granted');
         return null;
     }
 }
