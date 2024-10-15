@@ -24,20 +24,6 @@ export const getMap = async (containerId: string) => {
     return map
 }
 
-export const cleanUpMapAndDrawMarker = (locations: Location[], newLocation: Location) => {
-    const existingMarkerIndex = locations.findIndex(location => {
-
-        return location.longitude === newLocation.longitude && location.latitude === newLocation.latitude;
-    });
-
-    // If a marker is found at the same location, remove it
-    if (existingMarkerIndex !== -1) {
-         // Remove the marker from the map
-         // Remove it from the array
-    }
-}
-
-
 export const drawMarker = (map: mapboxgl.Map, location: {
     coordinates: LngLatLike,
     properties: { title: string, comment: string, locationType: LocationTypes }
