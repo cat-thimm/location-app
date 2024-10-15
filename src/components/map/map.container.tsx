@@ -21,7 +21,6 @@ const MapContainer: React.FC<ContainerProps> = () => {
                 <>
                     <IonSpinner className="spinner" name="circular" color="light"/>
                     <div className="map-overlay"/>
-                    {/* Add the overlay when loading */}
                 </>
             )}
 
