@@ -1,3 +1,4 @@
+import React from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
@@ -32,13 +33,12 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import {Preferences} from "@capacitor/preferences";
 import {useEffect} from "react";
 import {initializeStorage} from "./helpers/storage";
 
 setupIonicReact();
 
-const App: React.FC = () => {
+const App = () => {
     useEffect(() => {
         initializeStorage().then();
     }, []);

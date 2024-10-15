@@ -1,0 +1,6 @@
+.search-location-list {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 300px;
+}

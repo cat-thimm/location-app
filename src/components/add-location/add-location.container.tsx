@@ -1,13 +1,13 @@
 import {useEffect, useMemo,  useState} from "react";
 import {IonInputCustomEvent, IonTextareaCustomEvent, TextareaInputEventDetail} from "@ionic/core/dist/types/components";
 import {InputInputEventDetail} from "@ionic/react";
+import mapboxgl from "mapbox-gl";
 
 import {drawMarker} from "../../helpers/mapbox";
+import {storeLocation} from "../../helpers/storage";
 
 import {AddLocation} from "./add-location.markup";
 import {AddLocationContainerProps, LocationTypes, MenuItem} from "./add-location.types";
-import {storeLocation} from "../../helpers/storage";
-import mapboxgl from "mapbox-gl";
 
 const MENU_ITEMS: MenuItem[] = [
     {id: "1", type: LocationTypes.RESTAURANT, title: "Restaurant", description: "Add restaurants, cafes and others."},

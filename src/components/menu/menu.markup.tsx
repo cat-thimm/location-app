@@ -5,15 +5,17 @@ import {MenuProps} from "./menu.types";
 import "./menu.styles.css"
 
 
-export const Menu = ({disabled, paragraphText, headline, onClick, children, buttonText}: MenuProps) => {
+export const Menu = ({disabled, paragraphText, headline, onClick, children, buttonText, className}: MenuProps) => {
     return <form onSubmit={(e) => {
         e.preventDefault();
-        onClick();
-    }}>
+        if (onClick) onClick();
+    }}
+                 className={className}>
         <div className="menu-header-wrapper">
             <div className="menu-header">
                 <h1>{headline}</h1>
-                <IonButton type="submit" fill="clear" disabled={disabled}>{buttonText}</IonButton>
+                {disabled !== null &&
+                    <IonButton type="submit" fill="clear" disabled={disabled}>{buttonText}</IonButton>}
             </div>
             <p>
                 {paragraphText}
