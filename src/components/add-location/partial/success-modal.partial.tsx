@@ -5,13 +5,12 @@ import {
     IonContent,
     IonIcon,
     IonImg,
-    IonItem,
     IonModal,
     IonTitle,
     IonToolbar
 } from "@ionic/react";
-import {SupportModalProps} from "../add-location.types";
 
+import {SupportModalProps} from "../add-location.types";
 import "../add-location.styles.css"
 
 export const SuccessModal = ({isOpen, locationName, dismiss}: SupportModalProps) => {
@@ -26,7 +25,7 @@ export const SuccessModal = ({isOpen, locationName, dismiss}: SupportModalProps)
                 </IonButtons>
             </IonToolbar>
 
-            <div className={"success-modal "}>
+            <div className="success-modal">
 
                 <IonImg src="/assets/icons/success.png"/>
 
