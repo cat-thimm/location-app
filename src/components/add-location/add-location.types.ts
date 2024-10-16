@@ -26,6 +26,14 @@ export interface AddLocationProps {
     locationComment: string;
     onChangeLocationComment: (event: any) => void;
     onSaveForm: () => void;
+    showSuccessModal: boolean;
+    setShowSuccessModal: (showSuccessModal: boolean) => void;
+}
+
+export interface SupportModalProps {
+    locationName: string;
+    dismiss: () => void;
+    isOpen: boolean;
 }
 
 export interface MenuItem {

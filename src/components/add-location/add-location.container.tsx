@@ -22,6 +22,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
     const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
     const [locationName, setLocationName] = useState("")
     const [locationComment, setLocationComment] = useState("")
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     // Memoize the marker instance, so it's only created when location or mapRef changes
     const marker = useMemo(() => new mapboxgl.Marker(), []);
@@ -48,11 +49,13 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
             setLocationName(e.detail.value)
         }
     }
+
     const onChangeLocationComment = (e: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
         if (e.detail.value) {
             setLocationComment(e.detail.value)
         }
     }
+
 
     const onSaveForm = async (): Promise<void> => {
         if (mapRef?.current && selectedType !== null && location !== null) {
@@ -81,6 +84,9 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
             setLocationName("")
             setLocationComment("")
             setShowDescriptionForm(false)
+
+            // show successModal
+            setShowSuccessModal(true)
         }
     }
 
@@ -96,6 +102,8 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
                         onChangeLocationComment={onChangeLocationComment}
                         onSaveForm={onSaveForm}
                         setClickedLocation={setClickedLocation}
+                        showSuccessModal={showSuccessModal}
+                        setShowSuccessModal={setShowSuccessModal}
     />
 
 }
