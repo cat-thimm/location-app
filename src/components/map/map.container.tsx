@@ -1,20 +1,18 @@
-import {useEffect, useState} from "react";
+import React from "react";
+import {IonSpinner} from "@ionic/react";
+
+import {AddLocationContainer} from "../add-location";
 
 import './map.styles.css';
+import {MapContainerProps} from "./map.types";
 
-import useMapbox from "../../hooks/use-mapbox";
-import mapboxgl from "mapbox-gl";
-import {AddLocationContainer} from "../add-location/add-location.container";
-import {IonLoading, IonSpinner} from "@ionic/react";
-
-interface ContainerProps {
-}
-
-const MapContainer: React.FC<ContainerProps> = () => {
-    // Invoke the custom `useMapbox` hook, passing the ID of the map container
-    // This will initialize the Mapbox instance and associate it with the div#map element
-    const {clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
-
+export const MapContainer = ({
+                                 mapRef,
+                                 setClickedLocation,
+                                 isLoading,
+                                 clickedLocation,
+                                 setRefetch
+                             }: MapContainerProps) => {
 
     return (<>
             {isLoading && (
@@ -27,9 +25,8 @@ const MapContainer: React.FC<ContainerProps> = () => {
             <div id="map" className={isLoading ? 'map-loading' : ''}/>
 
             <AddLocationContainer location={clickedLocation} mapRef={mapRef}
-                                  setClickedLocation={setClickedLocation}/>
+                                  setClickedLocation={setClickedLocation}
+                                  setRefetch={setRefetch}/>
         </>
     );
 };
-
-export default MapContainer;

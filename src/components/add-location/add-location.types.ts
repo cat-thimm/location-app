@@ -10,6 +10,7 @@ export interface AddLocationContainerProps {
     location: IAddLocation| null
     mapRef?: React.RefObject<mapboxgl.Map>;
     setClickedLocation: (location: IAddLocation | null) => void
+    setRefetch: (refetch: boolean) => void
 }
 
 export interface AddLocationProps {
@@ -25,6 +26,14 @@ export interface AddLocationProps {
     locationComment: string;
     onChangeLocationComment: (event: any) => void;
     onSaveForm: () => void;
+    showSuccessModal: boolean;
+    setShowSuccessModal: (showSuccessModal: boolean) => void;
+}
+
+export interface SupportModalProps {
+    locationName: string;
+    dismiss: () => void;
+    isOpen: boolean;
 }
 
 export interface MenuItem {

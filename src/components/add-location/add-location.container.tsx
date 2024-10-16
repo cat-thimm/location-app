@@ -1,13 +1,13 @@
 import {useEffect, useMemo,  useState} from "react";
 import {IonInputCustomEvent, IonTextareaCustomEvent, TextareaInputEventDetail} from "@ionic/core/dist/types/components";
 import {InputInputEventDetail} from "@ionic/react";
+import mapboxgl from "mapbox-gl";
 
 import {drawMarker} from "../../helpers/mapbox";
+import {storeLocation} from "../../helpers/storage";
 
 import {AddLocation} from "./add-location.markup";
 import {AddLocationContainerProps, LocationTypes, MenuItem} from "./add-location.types";
-import {storeLocation} from "../../helpers/storage";
-import mapboxgl from "mapbox-gl";
 
 const MENU_ITEMS: MenuItem[] = [
     {id: "1", type: LocationTypes.RESTAURANT, title: "Restaurant", description: "Add restaurants, cafes and others."},
@@ -17,11 +17,12 @@ const MENU_ITEMS: MenuItem[] = [
     {id: "5", type: LocationTypes.CUSTOM, title: "Custom Event", description: "Your custom event"},
 ]
 
-export const AddLocationContainer = ({location, mapRef, setClickedLocation}: AddLocationContainerProps) => {
+export const AddLocationContainer = ({location, mapRef, setClickedLocation, setRefetch}: AddLocationContainerProps) => {
     const [selectedType, setSelectedType] = useState<LocationTypes | null>(null)
     const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
     const [locationName, setLocationName] = useState("")
     const [locationComment, setLocationComment] = useState("")
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     // Memoize the marker instance, so it's only created when location or mapRef changes
     const marker = useMemo(() => new mapboxgl.Marker(), []);
@@ -48,11 +49,13 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
             setLocationName(e.detail.value)
         }
     }
+
     const onChangeLocationComment = (e: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
         if (e.detail.value) {
             setLocationComment(e.detail.value)
         }
     }
+
 
     const onSaveForm = async (): Promise<void> => {
         if (mapRef?.current && selectedType !== null && location !== null) {
@@ -72,12 +75,18 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
                 visitDate: new Date().toLocaleDateString(),
             })
 
+            // set flag to refetch locations
+            setRefetch(true)
+
             // Reset Form and Location
             setClickedLocation(null)
             setSelectedType(null)
             setLocationName("")
             setLocationComment("")
             setShowDescriptionForm(false)
+
+            // show successModal
+            setShowSuccessModal(true)
         }
     }
 
@@ -93,6 +102,8 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
                         onChangeLocationComment={onChangeLocationComment}
                         onSaveForm={onSaveForm}
                         setClickedLocation={setClickedLocation}
+                        showSuccessModal={showSuccessModal}
+                        setShowSuccessModal={setShowSuccessModal}
     />
 
 }
