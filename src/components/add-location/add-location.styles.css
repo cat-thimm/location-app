@@ -49,7 +49,6 @@ ion-icon {
 ion-modal#success-modal {
     --border-radius: 16px;
     --height: 200px;
-    --width: 230px;
     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
