@@ -5,8 +5,14 @@ import {getAllLocations} from "../helpers/storage";
 import {Location} from "../types/location";
 import {SearchLocationContainer} from "../components/search-location";
 import {MapContainer} from "../components/map";
+import useMapbox from "../hooks/use-mapbox";
 
 const HomeContainer: React.FC = () => {
+    // Invoke the custom `useMapbox` hook, passing the ID of the map container
+    // This will initialize the Mapbox instance and associate it with the div#map element
+    const {clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
+
+
     const [locations, setLocations] = useState<Location[]>([]); // Adjust the type as needed
 
     useEffect(() => {
@@ -21,9 +27,11 @@ const HomeContainer: React.FC = () => {
 
     return (
         <IonPage>
-            <SearchLocationContainer
-                locations={locations}/>
-            <MapContainer/>
+            <SearchLocationContainer locations={locations} mapRef={mapRef}/>
+            <MapContainer mapRef={mapRef}
+                          setClickedLocation={setClickedLocation}
+                          clickedLocation={clickedLocation}
+                          isLoading={isLoading}/>
         </IonPage>
     );
 };

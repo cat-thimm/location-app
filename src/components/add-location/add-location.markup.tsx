@@ -32,43 +32,48 @@ export const AddLocation = ({
                      }}>
         {!showDescriptionForm ?
             <Menu headline={"Add new location"} paragraphText={location?.address ?? ""} disabled={selectedType === null}
-                  buttonText={"Next"} onClick={() => setShowDescriptionForm(true)}>{menuItems.map(item => {
-                return (
-                    <MenuItem item={item} onClick={() => setSelectedType(item.type)}
-                              showSelectedIcon={selectedType === item.type}/>
-                )
-            })}
+                  buttonText={"Next"} onClick={() => setShowDescriptionForm(true)}>
+                <>
+                    {menuItems.map(item => {
+                        return (
+                            <MenuItem key={item.id} item={item} onClick={() => setSelectedType(item.type)}
+                                      showSelectedIcon={selectedType === item.type}/>
+                        )
+                    })}
+                </>
             </Menu> :
             <Menu headline={"Add description"} paragraphText={location?.address ?? ""} disabled={locationName === ""}
                   buttonText={"Save"} onClick={onSaveForm}>
-                <div className="add-location-menu-item" onClick={() => {
-                    setShowDescriptionForm(false)
-                }}>
-                    <div className="add-location-menu-item-label" style={{alignItems: "center"}}>
+                <>
+                    <div className="add-location-menu-item" onClick={() => {
+                        setShowDescriptionForm(false)
+                    }}>
+                        <div className="add-location-menu-item-label" style={{alignItems: "center"}}>
+                            <IonIcon
+                                aria-hidden="true"
+                                src={`/assets/icons/${selectedType}.svg`}/>
+                            <IonLabel>
+                                {
+                                    menuItems.find(item => item.type === selectedType)?.title
+                                }
+                            </IonLabel>
+                        </div>
                         <IonIcon
                             aria-hidden="true"
-                            src={`/assets/icons/${selectedType}.svg`}/>
-                        <IonLabel>
-                            {
-                                menuItems.find(item => item.type === selectedType)?.title
-                            }
-                        </IonLabel>
+                            src={`/assets/icons/renew.svg`}/>
                     </div>
-                    <IonIcon
-                        aria-hidden="true"
-                        src={`/assets/icons/renew.svg`}/>
-                </div>
-                <IonItem>
-                    <IonInput type="text" label="Location Name" labelPlacement="stacked"
-                              placeholder="Please enter a name..." value={locationName}
-                              onIonInput={onChangeLocationName} required></IonInput>
-                </IonItem>
+                    <IonItem>
+                        <IonInput type="text" label="Location Name" labelPlacement="stacked"
+                                  placeholder="Please enter a name..." value={locationName}
+                                  onIonInput={onChangeLocationName} required></IonInput>
+                    </IonItem>
 
-                <IonItem>
-                    <IonTextarea label="(Optional) Comment" labelPlacement="stacked"
-                                 placeholder="Enter a comment for this location ..." value={locationComment}
-                                 onIonInput={onChangeLocationComment}></IonTextarea>
-                </IonItem>
+                    <IonItem>
+                        <IonTextarea label="(Optional) Comment" labelPlacement="stacked"
+                                     placeholder="Enter a comment for this location ..." value={locationComment}
+                                     onIonInput={onChangeLocationComment}></IonTextarea>
+                    </IonItem>
+                </>
             </Menu>
         }
     </IonModal>

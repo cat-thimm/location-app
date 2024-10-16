@@ -1,16 +1,12 @@
 import React from "react";
 import {IonSpinner} from "@ionic/react";
 
-import useMapbox from "../../hooks/use-mapbox";
-
 import {AddLocationContainer} from "../add-location";
 
 import './map.styles.css';
+import {MapContainerProps} from "./map.types";
 
-export const MapContainer = () => {
-    // Invoke the custom `useMapbox` hook, passing the ID of the map container
-    // This will initialize the Mapbox instance and associate it with the div#map element
-    const {clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
+export const MapContainer = ({mapRef, setClickedLocation, isLoading, clickedLocation}: MapContainerProps) => {
 
     return (<>
             {isLoading && (

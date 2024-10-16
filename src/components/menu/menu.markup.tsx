@@ -4,7 +4,6 @@ import React from "react";
 import {MenuProps} from "./menu.types";
 import "./menu.styles.css"
 
-
 export const Menu = ({disabled, paragraphText, headline, onClick, children, buttonText, className}: MenuProps) => {
     return <form onSubmit={(e) => {
         e.preventDefault();
@@ -21,8 +20,8 @@ export const Menu = ({disabled, paragraphText, headline, onClick, children, butt
                 {paragraphText}
             </p>
         </div>
-        <div className="menu-wrapper">
+        {React.isValidElement(children) && <div className="menu-wrapper">
             {children}
-        </div>
+        </div>}
     </form>
 }
