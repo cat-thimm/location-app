@@ -7,8 +7,7 @@ import {SearchLocationContainerProps} from "./search-location.types";
 
 export const SearchLocationContainer = ({locations, mapRef}: SearchLocationContainerProps) => {
     let [results, setResults] = useState<Location[]>([]);
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false); // Manage popover state
-
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const handleInput = (ev: Event) => {
         let query = '';

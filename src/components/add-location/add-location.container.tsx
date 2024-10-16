@@ -17,7 +17,7 @@ const MENU_ITEMS: MenuItem[] = [
     {id: "5", type: LocationTypes.CUSTOM, title: "Custom Event", description: "Your custom event"},
 ]
 
-export const AddLocationContainer = ({location, mapRef, setClickedLocation}: AddLocationContainerProps) => {
+export const AddLocationContainer = ({location, mapRef, setClickedLocation, setRefetch}: AddLocationContainerProps) => {
     const [selectedType, setSelectedType] = useState<LocationTypes | null>(null)
     const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
     const [locationName, setLocationName] = useState("")
@@ -71,6 +71,9 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation}: Add
                 name: locationName,
                 visitDate: new Date().toLocaleDateString(),
             })
+
+            // set flag to refetch locations
+            setRefetch(true)
 
             // Reset Form and Location
             setClickedLocation(null)

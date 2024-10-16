@@ -6,7 +6,13 @@ import {AddLocationContainer} from "../add-location";
 import './map.styles.css';
 import {MapContainerProps} from "./map.types";
 
-export const MapContainer = ({mapRef, setClickedLocation, isLoading, clickedLocation}: MapContainerProps) => {
+export const MapContainer = ({
+                                 mapRef,
+                                 setClickedLocation,
+                                 isLoading,
+                                 clickedLocation,
+                                 setRefetch
+                             }: MapContainerProps) => {
 
     return (<>
             {isLoading && (
@@ -19,7 +25,8 @@ export const MapContainer = ({mapRef, setClickedLocation, isLoading, clickedLoca
             <div id="map" className={isLoading ? 'map-loading' : ''}/>
 
             <AddLocationContainer location={clickedLocation} mapRef={mapRef}
-                                  setClickedLocation={setClickedLocation}/>
+                                  setClickedLocation={setClickedLocation}
+                                  setRefetch={setRefetch}/>
         </>
     );
 };
