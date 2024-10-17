@@ -1,25 +1,42 @@
-import {IonButton} from "@ionic/react";
+import {IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar} from "@ionic/react";
 import React from "react";
 
 import {MenuProps} from "./menu.types";
 import "./menu.styles.css"
 
-export const Menu = ({disabled, paragraphText, headline, onClick, children, buttonText, className}: MenuProps) => {
+export const Menu = ({
+                         disabled,
+                         paragraphText,
+                         headline,
+                         onClick,
+                         children,
+                         buttonText,
+                         className,
+                         onDismiss
+                     }: MenuProps) => {
     return <form onSubmit={(e) => {
         e.preventDefault();
         if (onClick) onClick();
     }}
                  className={className}>
-        <div className="menu-header-wrapper">
-            <div className="menu-header">
-                <h1>{headline}</h1>
-                {disabled !== null &&
-                    <IonButton type="submit" fill="clear" disabled={disabled}>{buttonText}</IonButton>}
-            </div>
-            <p>
-                {paragraphText}
-            </p>
-        </div>
+        {headline && paragraphText && <IonHeader>
+            <IonToolbar>
+                <IonButtons
+                    slot="start">
+                    <IonButton color="medium" onClick={onDismiss}>
+                        <IonIcon src="/assets/icons/close.svg"/>
+                    </IonButton>
+                </IonButtons>
+
+                <IonTitle>{headline}<p>
+                    {paragraphText}
+                </p></IonTitle>
+
+                <IonButtons slot="end">
+                    <IonButton type="submit" fill="clear" disabled={disabled}>{buttonText}</IonButton>
+                </IonButtons>
+            </IonToolbar>
+        </IonHeader>}
         {React.isValidElement(children) && <div className="menu-wrapper">
             {children}
         </div>}

@@ -1,30 +1,56 @@
 import React from "react";
-import {IonContent, IonHeader, IonModal, IonPopover, IonSearchbar, IonToolbar} from "@ionic/react";
+import {
+    IonButton, IonButtons,
+    IonCol,
+    IonHeader,
+    IonIcon,
+    IonRow,
+    IonSearchbar,
+    IonToolbar
+} from "@ionic/react";
 
 import {Menu} from "../menu";
 import {MenuItem} from "../menu-item";
 import {LocationTypes} from "../add-location/add-location.types";
+import {FilterMenuContainer} from "../filter-menu";
 
 import {SearchLocationProps} from "./search-location.types";
 import "./search-location.styles.css"
 
-export const SearchLocation = ({results, handleInput, isPopoverOpen, setIsPopoverOpen, flyToLocation}: SearchLocationProps) => {
-    return <div className="search-location">
+export const SearchLocation = ({
+                                   results,
+                                   handleInput,
+                                   isPopoverOpen,
+                                   setIsPopoverOpen,
+                                   flyToLocation,
+                                   showFilterMenu,
+                                   setShowFilterMenu,
+                                   handleFilterApply,
+                                   activeFilters
+                               }: SearchLocationProps) => {
+    return <>
         <IonHeader>
             <IonToolbar>
-                <IonSearchbar
-                    animated
-                    placeholder="Search for location"
-                    onIonInput={handleInput}
-                    id="searchbar"
-                    onIonCancel={() => setIsPopoverOpen(false)}
-                />
+                <IonRow className="row">
+                    <IonCol>
+                        <IonSearchbar
+                            animated
+                            placeholder="Search for location"
+                            onIonInput={handleInput}
+                            id="searchbar"
+                            onIonCancel={() => setIsPopoverOpen(false)}
+                        />
+                    </IonCol>
+                    <IonButtons>
+                        <IonButton fill="clear" onClick={() => setShowFilterMenu(true)}>
+                            <IonIcon src="/assets/icons/filter.svg"/>
+                        </IonButton>
+                    </IonButtons>
+                </IonRow>
             </IonToolbar>
             {isPopoverOpen &&
                 <Menu
-                    headline={`Search Results (${results.length})`}
-                    paragraphText="Enter a query above"
-                    disabled={null}
+                    disabled={false}
                     className="menu"
                 >
                     {results.length > 0 ? <div className="search-location-list">
@@ -47,6 +73,13 @@ export const SearchLocation = ({results, handleInput, isPopoverOpen, setIsPopove
                 </Menu>
             }
         </IonHeader>
-
-    </div>
+        <FilterMenuContainer
+            onDismiss={() => {
+                setShowFilterMenu(false)
+            }}
+            showMenu={showFilterMenu}
+            onApplyFilter={handleFilterApply}
+            activeFilters={activeFilters}
+        />
+    </>
 }

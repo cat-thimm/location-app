@@ -1,10 +1,12 @@
 import {useEffect, useRef, useState} from "react";
-import mapboxgl, {Marker} from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 import {Preferences} from "@capacitor/preferences";
 
 import {drawMarker, getMap} from "../helpers/mapbox";
 
 import "../style.css"
+import {LocationTypes} from "../components/add-location/add-location.types";
+import {Location} from "../types/location";
 
 /**
  * Custom hook to initialize and manage a Mapbox map instance.
@@ -15,6 +17,14 @@ const useMapbox = (containerId: string) => {
     const mapRef = useRef<mapboxgl.Map | null>(null);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [activeFilters, setActiveFilters] = useState<LocationTypes[]>([
+        LocationTypes.RESTAURANT,
+        LocationTypes.TOURISTIC,
+        LocationTypes.CUSTOM,
+        LocationTypes.PUBLIC_FACILITY,
+        LocationTypes.EVENT_VENUE,
+    ]);
+
     const [clickedLocation, setClickedLocation] = useState<{
         latitude: number,
         longitude: number,
@@ -27,7 +37,7 @@ const useMapbox = (containerId: string) => {
          * This function initializes the map instance and adds necessary controls.
          */
         async function setupMap() {
-
+            setIsLoading(true);
             mapRef.current = await getMap(containerId);
 
             if (mapRef.current) {
@@ -42,8 +52,8 @@ const useMapbox = (containerId: string) => {
                     })
                 );
 
-                await drawMarkersFromJSON(mapRef.current);
-
+                await drawMarkersFromJSON(mapRef.current, activeFilters);
+                setIsLoading(false);
             }
 
             mapRef.current.on('click', async (event) => {
@@ -69,9 +79,9 @@ const useMapbox = (containerId: string) => {
             }
         }
 
-    }, [containerId]);
+    }, [containerId, activeFilters]);
 
-    return {clickedLocation, setClickedLocation, isLoading, mapRef};
+    return {activeFilters, setActiveFilters, clickedLocation, setClickedLocation, isLoading, mapRef};
 };
 
 
@@ -98,7 +108,7 @@ const getAddressFromCoordinates = async (lng: number, lat: number): Promise<stri
 };
 
 
-const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
+const drawMarkersFromJSON = async (map: mapboxgl.Map | null, activeFilters: LocationTypes[]) => {
     const mapData = await Preferences.get({
         key: 'mapData',
     })
@@ -107,9 +117,9 @@ const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
         const locations = JSON.parse(mapData?.value).locations
 
 
-        locations.forEach((location: any) => {
+        locations.forEach((location: Location) => {
 
-            if (map) {
+            if (map && activeFilters.includes(location.type as LocationTypes)) {
                 drawMarker(map, {
                     coordinates: {
                         lat: location.latitude,
@@ -118,7 +128,7 @@ const drawMarkersFromJSON = async (map: mapboxgl.Map | null) => {
                     properties: {
                         title: location.name,
                         comment: location.description,
-                        locationType: location.type,
+                        locationType: location.type as LocationTypes,
                     },
                 })
             }

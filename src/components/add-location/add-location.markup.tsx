@@ -37,12 +37,16 @@ export const AddLocation = ({
                   isOpen={location !== null}
                   onIonModalDidDismiss={() => {
                       setClickedLocation(null)
-                  }}>
+                  }}
+                  mode="ios"
+        >
 
             {!showDescriptionForm ?
                 <Menu headline={"Add new location"} paragraphText={location?.address ?? ""}
                       disabled={selectedType === null}
-                      buttonText={"Next"} onClick={() => setShowDescriptionForm(true)}>
+                      buttonText={"Next"} onClick={() => setShowDescriptionForm(true)}
+                      onDismiss={() => setClickedLocation(null)}
+                >
                     <>
                         {menuItems.map(item => {
                             return (
@@ -54,7 +58,9 @@ export const AddLocation = ({
                 </Menu> :
                 <Menu headline={"Add description"} paragraphText={location?.address ?? ""}
                       disabled={locationName === ""}
-                      buttonText={"Save"} onClick={onSaveForm}>
+                      buttonText={"Save"} onClick={onSaveForm}
+                      onDismiss={() => setClickedLocation(null)}
+                >
                     <>
                         <div className="add-location-menu-item" onClick={() => {
                             setShowDescriptionForm(false)
