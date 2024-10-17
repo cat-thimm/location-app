@@ -4,10 +4,13 @@ import {Location} from "../../types/location";
 
 import {SearchLocation} from "./search-location.markup";
 import {SearchLocationContainerProps} from "./search-location.types";
+import {LocationTypes} from "../add-location/add-location.types";
 
-export const SearchLocationContainer = ({locations, mapRef}: SearchLocationContainerProps) => {
+export const SearchLocationContainer = ({locations, mapRef, activeFilters, setActiveFilters}: SearchLocationContainerProps) => {
     let [results, setResults] = useState<Location[]>([]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [showFilterMenu, setShowFilterMenu] = useState(false);
+
 
     const handleInput = (ev: Event) => {
         let query = '';
@@ -33,10 +36,19 @@ export const SearchLocationContainer = ({locations, mapRef}: SearchLocationConta
         }
     }
 
+
+    const handleFilterApply = (selectedFilters: LocationTypes[]) => {
+        setActiveFilters(selectedFilters);
+    };
+
     return <SearchLocation results={results}
                            handleInput={handleInput}
                            isPopoverOpen={isPopoverOpen}
                            setIsPopoverOpen={setIsPopoverOpen}
                            flyToLocation={flyToLocation}
+                           setShowFilterMenu={setShowFilterMenu}
+                           showFilterMenu={showFilterMenu}
+                           activeFilters={activeFilters}
+                           handleFilterApply={handleFilterApply}
     />
 }

@@ -10,7 +10,7 @@ import useMapbox from "../hooks/use-mapbox";
 const HomeContainer: React.FC = () => {
     // Invoke the custom `useMapbox` hook, passing the ID of the map container
     // This will initialize the Mapbox instance and associate it with the div#map element
-    const {clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
+    const {activeFilters, setActiveFilters, clickedLocation, setClickedLocation, isLoading, mapRef} = useMapbox("map");
     const [refetch, setRefetch] = useState<boolean>(false);
 
     const [locations, setLocations] = useState<Location[]>([]); // Adjust the type as needed
@@ -27,7 +27,8 @@ const HomeContainer: React.FC = () => {
 
     return (
         <IonPage>
-            <SearchLocationContainer locations={locations} mapRef={mapRef}/>
+            <SearchLocationContainer locations={locations} mapRef={mapRef} setActiveFilters={setActiveFilters}
+                                     activeFilters={activeFilters}/>
             <MapContainer mapRef={mapRef}
                           setClickedLocation={setClickedLocation}
                           clickedLocation={clickedLocation}
