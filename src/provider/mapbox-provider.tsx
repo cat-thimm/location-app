@@ -1,12 +1,12 @@
 import {ReactNode, useEffect, useRef, useState} from "react";
 import mapboxgl from 'mapbox-gl';
 
-import {getMap} from "../helpers/mapbox";
+import {drawMarker, getMap} from "../helpers/mapbox";
 import {LocationTypes} from "../components/add-location/add-location.types";
 import {Location} from "../types/location";
 import {getAllLocations} from "../helpers/storage";
 
-import {drawMarkersFromJSON, getAddressFromCoordinates} from "./mapbox-provider.helper";
+import {getAddressFromCoordinates} from "./mapbox-provider.helper";
 import {MapboxContext} from "./mapbox-provider.context";
 
 /**
@@ -29,7 +29,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         LocationTypes.EVENT_VENUE,
     ]);
 
-    const [clickedMarker, setClickedMarker] = useState<any>(null);
+    const [clickedMarker, setClickedMarker] = useState<Location | undefined>();
 
     const [clickedLocation, setClickedLocation] = useState<{
         latitude: number;
@@ -78,7 +78,19 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
                     showUserLocation: true,
                 })
             );
-            await drawMarkersFromJSON(mapRef.current, activeFilters, setClickedMarker);
+
+            // Draw markers from local storage
+            const mapData = await getAllLocations()
+
+            mapData.locations.forEach((location: Location) => {
+                if (mapRef.current && activeFilters.includes(location.type as LocationTypes)) {
+                    drawMarker(
+                        mapRef.current,
+                        location,
+                        setClickedMarker // pass ref for function to set marker in onclick event listener
+                    );
+                }
+            });
             setIsLoading(false);
         }
 

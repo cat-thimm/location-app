@@ -56,12 +56,7 @@ export const AddLocationContainer = () => {
 
     const onSaveForm = async (): Promise<void> => {
         if (mapRef?.current && selectedType !== null && clickedLocation !== null) {
-            drawMarker(mapRef?.current, {
-                coordinates: {lat: clickedLocation.latitude, lon: clickedLocation.longitude},
-                properties: {title: locationName, comment: locationComment, locationType: selectedType},
-            }, setClickedMarker)
-
-            await storeLocation({
+            const newLocation = {
                 id: uuid(),
                 type: selectedType,
                 description: locationComment,
@@ -70,21 +65,29 @@ export const AddLocationContainer = () => {
                 address: clickedLocation.address,
                 name: locationName,
                 visitDate: new Date().toLocaleDateString(),
-            })
+            }
+
+            drawMarker(mapRef?.current, newLocation, setClickedMarker)
+
+            await storeLocation(newLocation)
 
             // set flag to refetch locations
             setRefetch(true)
 
             // Reset Form and Location
-            setClickedLocation(null)
-            setSelectedType(null)
-            setLocationName("")
-            setLocationComment("")
-            setShowDescriptionForm(false)
+            resetForms()
 
             // show successModal
             setShowSuccessModal(true)
         }
+    }
+
+    const resetForms = () => {
+        setClickedLocation(null)
+        setSelectedType(null)
+        setLocationName("")
+        setLocationComment("")
+        setShowDescriptionForm(false)
     }
 
     return <AddLocation menuItems={MENU_ITEMS}
@@ -98,9 +101,9 @@ export const AddLocationContainer = () => {
                         locationComment={locationComment}
                         onChangeLocationComment={onChangeLocationComment}
                         onSaveForm={onSaveForm}
-                        setClickedLocation={setClickedLocation}
                         showSuccessModal={showSuccessModal}
                         setShowSuccessModal={setShowSuccessModal}
+                        resetForms={resetForms}
     />
 
 }

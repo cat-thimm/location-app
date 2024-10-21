@@ -29,32 +29,3 @@ export const getAddressFromCoordinates = async (lng: number, lat: number): Promi
     // Return the first address found or null if not found
     return features.length > 0 ? features[0].place_name : "";
 };
-
-export const drawMarkersFromJSON = async (
-    map: mapboxgl.Map | null,
-    activeFilters: LocationTypes[],
-    setClickedMarker: (marker: any) => void
-) => {
-    const mapData = await getAllLocations()
-
-    mapData.locations.forEach((location: Location) => {
-        if (map && activeFilters.includes(location.type as LocationTypes)) {
-            drawMarker(
-                map,
-                {
-                    coordinates: {
-                        lat: location.latitude,
-                        lng: location.longitude,
-                    },
-                    properties: {
-                        title: location.name,
-                        comment: location.description,
-                        locationType: location.type as LocationTypes,
-                    },
-                },
-                setClickedMarker
-            );
-        }
-    });
-
-};

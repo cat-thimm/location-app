@@ -10,7 +10,6 @@ export interface IAddLocation {
 export interface AddLocationProps {
     menuItems: MenuItem[];
     location: IAddLocation | null;
-    setClickedLocation: (location: IAddLocation | null) => void
     selectedType: LocationTypes | null;
     setSelectedType: (type: LocationTypes | null) => void;
     showDescriptionForm: boolean;
@@ -22,6 +21,7 @@ export interface AddLocationProps {
     onSaveForm: () => void;
     showSuccessModal: boolean;
     setShowSuccessModal: (showSuccessModal: boolean) => void;
+    resetForms: () => void;
 }
 
 export interface SupportModalProps {

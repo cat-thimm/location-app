@@ -1,11 +1,11 @@
 import mapboxgl, {NavigationControl} from 'mapbox-gl/dist/mapbox-gl.js';
-import {LngLatLike} from "mapbox-gl";
 
 import {LocationTypes} from "../components/add-location/add-location.types";
 
 import {requestLocation} from "./permissions";
 
 import "../style.css"
+import {Location} from "../types/location";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
@@ -25,17 +25,14 @@ export const getMap = async (containerId: string) => {
     return map
 }
 
-export const drawMarker = (map: mapboxgl.Map, location: {
-    coordinates: LngLatLike,
-    properties: { title: string, comment: string, locationType: LocationTypes },
-
-}, setClickedMarker: (marker: any) => void,) => {
+export const drawMarker = (map: mapboxgl.Map, location: Location, setClickedMarker: (marker: Location) => void,) => {
     // Create a wrapper element where the React component will be rendered
     const el = document.createElement("div");
     el.className = 'marker';
+    el.id = location.id // use this to trigger the IonPopover in map.container.tsx with the right marker
 
     let backgroundColor;
-    switch (location.properties.locationType) {
+    switch (location.type) {
         case LocationTypes.RESTAURANT:
             backgroundColor = "#7BFFAD";
             break;
@@ -57,16 +54,17 @@ export const drawMarker = (map: mapboxgl.Map, location: {
     }
 
     el.style.background = `${backgroundColor} no-repeat center`;
-    el.style.backgroundImage = `url('/assets/icons/${location.properties.locationType}.svg')`
+    el.style.backgroundImage = `url('/assets/icons/${location.type}.svg')`
 
     // Create a Mapbox marker with the element containing the IonIcon
     new mapboxgl.Marker(el)
-        .setLngLat(location.coordinates)
+        .setLngLat({lat: location.latitude, lng: location.longitude})
         .addTo(map);
 
     el.addEventListener('click', (event) => {
         event.stopPropagation();
 
+        console.log('clicked');
         setClickedMarker(location)
     });
 };

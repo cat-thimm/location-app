@@ -2,8 +2,8 @@ import {LocationTypes} from "../components/add-location/add-location.types";
 import {Location} from "../types/location";
 
 export interface MapboxContextType {
-    clickedMarker: any;
-    setClickedMarker: (marker: any) => void;
+    clickedMarker?: Location;
+    setClickedMarker: (marker: Location | undefined) => void;
     activeFilters: LocationTypes[];
     setActiveFilters: (filters: LocationTypes[]) => void;
     clickedLocation: {
