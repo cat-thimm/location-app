@@ -6,12 +6,6 @@ export interface IAddLocation {
     address: string;
 }
 
-export interface AddLocationContainerProps {
-    location: IAddLocation| null
-    mapRef?: React.RefObject<mapboxgl.Map>;
-    setClickedLocation: (location: IAddLocation | null) => void
-    setRefetch: (refetch: boolean) => void
-}
 
 export interface AddLocationProps {
     menuItems: MenuItem[];

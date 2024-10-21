@@ -1,17 +1,20 @@
-import {useEffect, useMemo,  useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {IonInputCustomEvent, IonTextareaCustomEvent, TextareaInputEventDetail} from "@ionic/core/dist/types/components";
 import {InputInputEventDetail} from "@ionic/react";
 import mapboxgl from "mapbox-gl";
+import uuid from "react-uuid";
 
-import {drawMarker} from "../../helpers/mapbox";
 import {storeLocation} from "../../helpers/storage";
 import {MENU_ITEMS} from "../../data/location-menu";
+import {drawMarker} from "../../helpers/mapbox";
+import {useMapbox} from "../../hooks/use-mapbox";
 
 import {AddLocation} from "./add-location.markup";
-import {AddLocationContainerProps, LocationTypes} from "./add-location.types";
+import {LocationTypes} from "./add-location.types";
 
 
-export const AddLocationContainer = ({location, mapRef, setClickedLocation, setRefetch}: AddLocationContainerProps) => {
+export const AddLocationContainer = () => {
+    const {clickedLocation, mapRef, setClickedLocation, setRefetch, setClickedMarker} = useMapbox()
     const [selectedType, setSelectedType] = useState<LocationTypes | null>(null)
     const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
     const [locationName, setLocationName] = useState("")
@@ -23,9 +26,9 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
 
     useEffect(() => {
         if (mapRef && mapRef.current) {
-            if (location) {
+            if (clickedLocation) {
                 marker
-                    .setLngLat({lat: location.latitude, lon: location.longitude})
+                    .setLngLat({lat: clickedLocation.latitude, lon: clickedLocation.longitude})
                     .addTo(mapRef.current);
             } else {
                 marker.remove();
@@ -36,7 +39,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
         return () => {
             marker.remove()
         };
-    }, [location, mapRef, marker]);
+    }, [clickedLocation, mapRef, marker]);
 
     const onChangeLocationName = (e: IonInputCustomEvent<InputInputEventDetail>) => {
         if (e.detail.value) {
@@ -52,19 +55,19 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
 
 
     const onSaveForm = async (): Promise<void> => {
-        if (mapRef?.current && selectedType !== null && location !== null) {
+        if (mapRef?.current && selectedType !== null && clickedLocation !== null) {
             drawMarker(mapRef?.current, {
-                coordinates: {lat: location.latitude, lon: location.longitude},
+                coordinates: {lat: clickedLocation.latitude, lon: clickedLocation.longitude},
                 properties: {title: locationName, comment: locationComment, locationType: selectedType},
-            })
+            }, setClickedMarker)
 
             await storeLocation({
-                id: Math.random().toString(),
+                id: uuid(),
                 type: selectedType,
                 description: locationComment,
-                latitude: location.latitude,
-                longitude: location.longitude,
-                address: location.address,
+                latitude: clickedLocation.latitude,
+                longitude: clickedLocation.longitude,
+                address: clickedLocation.address,
                 name: locationName,
                 visitDate: new Date().toLocaleDateString(),
             })
@@ -85,7 +88,7 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
     }
 
     return <AddLocation menuItems={MENU_ITEMS}
-                        location={location}
+                        location={clickedLocation}
                         selectedType={selectedType}
                         setSelectedType={setSelectedType}
                         showDescriptionForm={showDescriptionForm}

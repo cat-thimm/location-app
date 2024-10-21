@@ -6,4 +6,5 @@ export interface MapContainerProps {
     isLoading: boolean
     mapRef:  React.MutableRefObject<mapboxgl.Map | null>
     setRefetch: (refetch: boolean) => void
+    trigger?: string
 }

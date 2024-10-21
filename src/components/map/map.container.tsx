@@ -1,18 +1,14 @@
 import React from "react";
-import {IonSpinner} from "@ionic/react";
+import {IonPopover, IonSpinner} from "@ionic/react";
+
+import {useMapbox} from "../../hooks/use-mapbox";
 
 import {AddLocationContainer} from "../add-location";
 
 import './map.styles.css';
-import {MapContainerProps} from "./map.types";
 
-export const MapContainer = ({
-                                 mapRef,
-                                 setClickedLocation,
-                                 isLoading,
-                                 clickedLocation,
-                                 setRefetch
-                             }: MapContainerProps) => {
+export const MapContainer = () => {
+    const {isLoading} = useMapbox()
 
     return (<>
             {isLoading && (
@@ -24,9 +20,12 @@ export const MapContainer = ({
 
             <div id="map" className={isLoading ? 'map-loading' : ''}/>
 
-            <AddLocationContainer location={clickedLocation} mapRef={mapRef}
-                                  setClickedLocation={setClickedLocation}
-                                  setRefetch={setRefetch}/>
+            {/*<IonPopover trigger={trigger}>*/}
+            {/*    Hallo :)*/}
+            {/*</IonPopover>*/}
+
+
+            <AddLocationContainer />
         </>
     );
 };

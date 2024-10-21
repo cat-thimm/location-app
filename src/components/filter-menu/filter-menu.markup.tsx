@@ -47,8 +47,9 @@ export const FilterMenu = ({
         <IonContent class="ion-padding">
             <IonList lines="full">
                 {filterOptions.map((option, index) => (
-                    <IonItem>
-                        <IonCheckbox justify="space-between" key={index}
+                    <IonItem key={index}>
+                        <IonIcon src={`/assets/icons/${option.type}.svg`}/>
+                        <IonCheckbox justify="space-between"
                                      checked={activeFilters.includes(option.type)}
                                      onIonChange={() => handleCheckboxChange(option.type)}
                         >{option.title}</IonCheckbox>

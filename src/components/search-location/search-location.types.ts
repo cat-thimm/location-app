@@ -1,13 +1,6 @@
 import {Location} from "../../types/location";
-import mapboxgl from "mapbox-gl";
-import {LocationTypes} from "../add-location/add-location.types";
 
-export interface SearchLocationContainerProps {
-    locations: Location[];
-    mapRef:  React.MutableRefObject<mapboxgl.Map | null>
-    activeFilters: LocationTypes[]
-    setActiveFilters: (activeFilters: LocationTypes[]) => void
-}
+import {LocationTypes} from "../add-location/add-location.types";
 
 export interface SearchLocationProps {
     results: Location[];
