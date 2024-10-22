@@ -38,8 +38,8 @@ export const Map = ({
             <SuccessModal locationName={clickedMarker?.name ?? ""} dismiss={() => setShowSuccessModal(false)}
                           isOpen={showSuccessModal}/>
             {clickedMarker && <IonModal
-                initialBreakpoint={0.5}
-                breakpoints={[0, 0.5]}
+                initialBreakpoint={0.45}
+                breakpoints={[0, 0.45]}
                 backdropDismiss={true}
                 backdropBreakpoint={0.3}
                 isOpen={true}

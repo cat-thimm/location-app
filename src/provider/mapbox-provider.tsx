@@ -1,5 +1,5 @@
 import {ReactNode, useEffect, useRef, useState} from "react";
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, {Marker} from 'mapbox-gl';
 
 import {drawMarker, getMap} from "../helpers/mapbox";
 import {LocationTypes} from "../components/add-location/add-location.types";
@@ -25,12 +25,13 @@ const INITIAL_FILTERS = [
  */
 export const MapboxProvider = ({containerId, children}: { containerId: string, children: ReactNode }) => {
     const mapRef = useRef<mapboxgl.Map | null>(null);
+    const markerRef = useRef<Marker | null>(null);  // Reference for the temporary marker
+
 
     const [refetch, setRefetch] = useState<boolean>(false);
     const [locations, setLocations] = useState<Location[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [activeFilters, setActiveFilters] = useState<LocationTypes[]>(INITIAL_FILTERS);
-
     const [clickedMarker, setClickedMarker] = useState<Location | undefined>();
 
     const [clickedLocation, setClickedLocation] = useState<{
@@ -38,6 +39,30 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         longitude: number;
         address: string;
     } | null>(null);
+
+    useEffect(() => {
+        if (clickedMarker && mapRef.current) {
+            // Remove existing marker if present
+            if (markerRef.current) {
+                markerRef.current.remove();
+            }
+
+            mapRef.current.flyTo({
+                center: [clickedMarker.longitude, clickedMarker.latitude],
+                essential: true // ensures the animation happens even if the user has `reduced motion` enabled
+            });
+
+            // Draw new temporary marker
+            markerRef.current = new Marker()
+                .setLngLat({ lat: clickedMarker.latitude, lng: clickedMarker.longitude })
+                .addTo(mapRef.current);
+
+        } else if (clickedMarker === undefined && markerRef.current) {
+            // Remove the marker when `clickedMarker` is undefined
+            markerRef.current.remove();
+            markerRef.current = null;
+        }
+    }, [clickedMarker]);
 
     useEffect(() => {
         // Fetch the locations and set them in the state
