@@ -23,8 +23,8 @@ export const FilterMenu = ({
                            }: FilterMenuProps) => {
     return <IonModal mode="ios"
                      backdropDismiss={true}
-                     breakpoints={[0, 0.55]}
-                     initialBreakpoint={0.85}
+                     breakpoints={[0, 0.45]}
+                     initialBreakpoint={0.45}
                      isOpen={showMenu}
                      onIonModalDidDismiss={onDismiss}>
         <IonHeader>

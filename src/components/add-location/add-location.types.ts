@@ -24,12 +24,6 @@ export interface AddLocationProps {
     resetForms: () => void;
 }
 
-export interface SupportModalProps {
-    locationName: string;
-    dismiss: () => void;
-    isOpen: boolean;
-}
-
 export interface MenuItem {
     id: string,
     type: LocationTypes,

@@ -20,7 +20,7 @@ export const Menu = ({
     }}
                  className={className}>
         {headline && paragraphText && <IonHeader>
-            <IonToolbar>
+            <IonToolbar style={{padding: "8px"}}>
                 <IonButtons
                     slot="start">
                     <IonButton color="medium" onClick={onDismiss}>
@@ -28,9 +28,10 @@ export const Menu = ({
                     </IonButton>
                 </IonButtons>
 
-                <IonTitle>{headline}<p>
-                    {paragraphText}
-                </p></IonTitle>
+                <IonTitle>
+                    {headline}
+                    <p>{paragraphText}</p>
+                </IonTitle>
 
                 <IonButtons slot="end">
                     <IonButton type="submit" fill="clear" disabled={disabled}>{buttonText}</IonButton>

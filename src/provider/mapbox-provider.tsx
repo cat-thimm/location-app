@@ -9,6 +9,14 @@ import {getAllLocations} from "../helpers/storage";
 import {getAddressFromCoordinates} from "./mapbox-provider.helper";
 import {MapboxContext} from "./mapbox-provider.context";
 
+const INITIAL_FILTERS = [
+    LocationTypes.RESTAURANT,
+    LocationTypes.TOURISTIC,
+    LocationTypes.CUSTOM,
+    LocationTypes.PUBLIC_FACILITY,
+    LocationTypes.EVENT_VENUE,
+]
+
 /**
  * The MapboxProvider is a context provider that initializes a Mapbox map instance and manages its state.
  * It provides functionalities for handling map interactions, marker clicks, and filtering locations.
@@ -21,13 +29,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
     const [refetch, setRefetch] = useState<boolean>(false);
     const [locations, setLocations] = useState<Location[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [activeFilters, setActiveFilters] = useState<LocationTypes[]>([
-        LocationTypes.RESTAURANT,
-        LocationTypes.TOURISTIC,
-        LocationTypes.CUSTOM,
-        LocationTypes.PUBLIC_FACILITY,
-        LocationTypes.EVENT_VENUE,
-    ]);
+    const [activeFilters, setActiveFilters] = useState<LocationTypes[]>(INITIAL_FILTERS);
 
     const [clickedMarker, setClickedMarker] = useState<Location | undefined>();
 
@@ -42,6 +44,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         const fetchLocations = async () => {
             const fetchedLocations = await getAllLocations();
             setLocations(fetchedLocations.locations);
+            setRefetch(false)
         };
 
         fetchLocations().then();
@@ -81,6 +84,9 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
             // Draw markers from local storage
             const mapData = await getAllLocations()
+
+            // setLocations(mapData.locations);
+
 
             mapData.locations.forEach((location: Location) => {
                 if (mapRef.current && activeFilters.includes(location.type as LocationTypes)) {

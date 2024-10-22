@@ -3,10 +3,10 @@ import {IonIcon, IonInput, IonItem, IonLabel, IonModal, IonTextarea} from '@ioni
 
 import {Menu} from "../menu";
 import {MenuItem} from "../menu-item";
+import {SuccessModal} from "../success-modal";
 
 import {AddLocationProps} from "./add-location.types";
 import "./add-location.styles.css"
-import {SuccessModal} from "./partial/success-modal.partial";
 
 export const AddLocation = ({
                                 menuItems,
@@ -24,8 +24,6 @@ export const AddLocation = ({
                                 setShowSuccessModal,
                                 resetForms
                             }: AddLocationProps) => {
-
-
     return <>
         <SuccessModal locationName={locationName} dismiss={() => setShowSuccessModal(false)} isOpen={showSuccessModal}/>
 

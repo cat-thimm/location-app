@@ -1,9 +1,30 @@
-import {IonButton, IonCol, IonContent, IonIcon, IonItemDivider, IonPopover, IonSpinner} from "@ionic/react";
-import {AddLocationContainer} from "../add-location";
 import React from "react";
+import {
+    IonButton,
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonLabel,
+    IonModal,
+    IonSpinner, IonTitle, IonToolbar
+} from "@ionic/react";
+
+import {AddLocationContainer} from "../add-location";
+
 import {MapProps} from "./map.types";
 
-export const Map = ({isLoading, clickedMarker, setClickedMarker}: MapProps) => {
+import "./map.styles.css"
+import {SuccessModal} from "../success-modal";
+
+export const Map = ({
+                        isLoading,
+                        clickedMarker,
+                        setClickedMarker,
+                        onDeleteLocation,
+                        showSuccessModal,
+                        setShowSuccessModal
+                    }: MapProps) => {
     return (<>
             {isLoading && (
                 <>
@@ -14,37 +35,58 @@ export const Map = ({isLoading, clickedMarker, setClickedMarker}: MapProps) => {
 
             <div id="map" className={isLoading ? 'map-loading' : ''}/>
 
-            {clickedMarker && <IonPopover trigger={clickedMarker?.id}
-                                          isOpen={true}
-                                          onIonPopoverDidDismiss={() => setClickedMarker(undefined)}
-                                          arrow={true}
+            <SuccessModal locationName={clickedMarker?.name ?? ""} dismiss={() => setShowSuccessModal(false)}
+                          isOpen={showSuccessModal}/>
+            {clickedMarker && <IonModal
+                initialBreakpoint={0.5}
+                breakpoints={[0, 0.5]}
+                backdropDismiss={true}
+                backdropBreakpoint={0.3}
+                isOpen={true}
+                onIonModalDidDismiss={() => setClickedMarker(undefined)}
             >
-                <IonContent>
-                    <IonCol>
-                        <IonItemDivider>
-                            <IonCol>
-                                <div className="map-popover-title">
-                                    <IonIcon src={`/assets/icons/${clickedMarker.type}.svg`}/>
-                                    {clickedMarker.name}
-                                </div>
-                                <p>{clickedMarker.address}</p>
+                <IonHeader>
+                    <IonToolbar>
+                        <IonButtons
+                            slot="start">
+                            <IonButton color="medium" onClick={() => setClickedMarker(undefined)}>
+                                <IonIcon src="/assets/icons/close.svg"/>
+                            </IonButton>
+                        </IonButtons>
+                        <IonTitle>
+                            <span className="map-popover-title ion-align-items-center ion-justify-content-center">
+                                <IonIcon src={`/assets/icons/${clickedMarker.type}.svg`}/>
+                                {clickedMarker.name}
+                            </span>
+                        </IonTitle>
 
-                            </IonCol>
-                        </IonItemDivider>
-                        {clickedMarker.description &&
-                            <IonItemDivider>
-                                {clickedMarker.description}
-                            </IonItemDivider>
+                        <IonButtons slot="end">
+                            <IonButton
+                                onClick={() => {
+                                }}
+                                strong={true}>Edit
+                            </IonButton>
+                        </IonButtons>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <div className="map-popover-content">
+                        <>
+                            <IonLabel style={{fontWeight: "500"}}>Address</IonLabel>
+                            <p>{clickedMarker.address}</p>
+                        </>
+                        {clickedMarker.description !== "" &&
+                            <>
+                                <IonLabel style={{fontWeight: "500"}}>Comment</IonLabel>
+                                <p style={{fontStyle: "italic"}}>"{clickedMarker.description}"</p>
+                            </>
                         }
-                        <div className="map-popover-buttons">
-                            <IonButton fill="clear" onClick={() => {
-                            }}>Edit</IonButton>
-                            <IonButton fill="clear" color="danger" onClick={() => {
-                            }}>Delete</IonButton>
-                        </div>
-                    </IonCol>
+
+                        <IonButton shape="round" fill="clear" style={{width: "100%"}} color="danger"
+                                   onClick={onDeleteLocation}>Delete Location</IonButton>
+                    </div>
                 </IonContent>
-            </IonPopover>}
+            </IonModal>}
 
             <AddLocationContainer/>
         </>

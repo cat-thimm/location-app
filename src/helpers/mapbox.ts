@@ -64,9 +64,7 @@ export const drawMarker = (map: mapboxgl.Map, location: Location, setClickedMark
     el.addEventListener('click', (event) => {
         event.stopPropagation();
 
-        console.log('clicked');
         setClickedMarker(location)
     });
 };
-
 
