@@ -14,7 +14,7 @@ import "./success-modal.styles.css"
 
 import {SupportModalProps} from "./success-modal.types";
 
-export const SuccessModal = ({isOpen, locationName, dismiss}: SupportModalProps) => {
+export const SuccessModal = ({isOpen, locationName, dismiss, infoText}: SupportModalProps) => {
     return <IonModal id="success-modal" isOpen={isOpen}>
         <IonContent style={{display: "flex", alignItems: "center"}}>
             <IonToolbar>
@@ -30,7 +30,7 @@ export const SuccessModal = ({isOpen, locationName, dismiss}: SupportModalProps)
 
                 <IonImg src="/assets/icons/success.png"/>
 
-                The location <strong>{locationName}</strong> was successfully added.
+                The location <strong>{locationName}</strong> was successfully {infoText}.
             </div>
 
         </IonContent>

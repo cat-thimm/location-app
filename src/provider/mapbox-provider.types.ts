@@ -13,8 +13,11 @@ export interface MapboxContextType {
     } | null;
     setClickedLocation: (location: { latitude: number; longitude: number; address: string } | null) => void;
     isLoading: boolean;
+    setIsLoading: (isLoading: boolean) => void;
     mapRef: React.MutableRefObject<mapboxgl.Map | null>;
-    refetch: boolean
-    setRefetch: (refetch: boolean) => void
-    locations: Location[]
+    refetch: boolean;
+    setRefetch: (refetch: boolean) => void;
+    locations: Location[];
+    rebuildMap: boolean;
+    setRebuildMap: (rebuildMap: boolean) => void;
 }

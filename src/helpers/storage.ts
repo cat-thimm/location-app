@@ -30,6 +30,23 @@ export const deleteLocation = async (locationId: string) => {
     });
 };
 
+// Update a location by its id or any unique property
+export const updateLocation = async (updatedLocation: Location) => {
+    const mapData = await getAllLocations();
+
+    // Map through locations and update the location that matches the ID
+    const updatedLocations = mapData.locations.map((location) =>
+        location.id === updatedLocation.id ? updatedLocation : location
+    );
+
+    // Update the mapData in storage
+    await Preferences.set({
+        key: 'mapData',
+        value: JSON.stringify({locations: updatedLocations}),
+    });
+};
+
+
 // Store new location in localStorage and update the local json file
 export const storeLocation = async (location: Location) => {
     const mapData = await getAllLocations()

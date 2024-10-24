@@ -29,6 +29,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
 
     const [refetch, setRefetch] = useState<boolean>(false);
+    const [rebuildMap, setRebuildMap] = useState(false)
     const [locations, setLocations] = useState<Location[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [activeFilters, setActiveFilters] = useState<LocationTypes[]>(INITIAL_FILTERS);
@@ -40,6 +41,8 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         address: string;
     } | null>(null);
 
+
+    // Handle drawing of temporary marker
     useEffect(() => {
         if (clickedMarker && mapRef.current) {
             // Remove existing marker if present
@@ -54,16 +57,16 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
             // Draw new temporary marker
             markerRef.current = new Marker()
-                .setLngLat({ lat: clickedMarker.latitude, lng: clickedMarker.longitude })
+                .setLngLat({lat: clickedMarker.latitude, lng: clickedMarker.longitude})
                 .addTo(mapRef.current);
 
         } else if (clickedMarker === undefined && markerRef.current) {
-            // Remove the marker when `clickedMarker` is undefined
             markerRef.current.remove();
             markerRef.current = null;
         }
     }, [clickedMarker]);
 
+    // Keep the search bar content up to date
     useEffect(() => {
         // Fetch the locations and set them in the state
         const fetchLocations = async () => {
@@ -75,6 +78,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         fetchLocations().then();
     }, [refetch]);
 
+    // Setup map and recreate it based on the filters or trigger this effect when rebuildMap is set to true
     useEffect(() => {
 
         setupMap().then();
@@ -82,10 +86,19 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         // Cleanup function to remove the map when the component is unmounted
         return () => {
             if (mapRef.current) {
-                mapRef.current.remove();
+                mapRef.current?.remove();
             }
         };
     }, [containerId, activeFilters]);
+
+    useEffect(() => {
+        if (rebuildMap) {
+
+            setupMap().then(() => {
+                setRebuildMap(false)
+            });
+        }
+    }, [rebuildMap]);
 
     /**
      * Asynchronously sets up the Mapbox map.
@@ -109,9 +122,6 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
             // Draw markers from local storage
             const mapData = await getAllLocations()
-
-            // setLocations(mapData.locations);
-
 
             mapData.locations.forEach((location: Location) => {
                 if (mapRef.current && activeFilters.includes(location.type as LocationTypes)) {
@@ -147,10 +157,13 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
                 clickedLocation,
                 setClickedLocation,
                 isLoading,
+                setIsLoading,
                 mapRef,
                 locations,
                 refetch,
-                setRefetch
+                setRefetch,
+                rebuildMap,
+                setRebuildMap
             }}
         >
             {children}
