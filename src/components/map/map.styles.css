@@ -25,3 +25,15 @@
 .map-loading {
     pointer-events: none;
 }
+
+.map-popover-title {
+    display: flex;
+    gap: 4px;
+}
+
+.map-popover-content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 10px;
+}

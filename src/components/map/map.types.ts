@@ -1,9 +1,13 @@
-import mapboxgl from "mapbox-gl";
+import {Location} from "../../types/location";
 
-export interface MapContainerProps {
-    clickedLocation: { latitude: number, longitude: number, address: string } | null
-    setClickedLocation: (location: { latitude: number, longitude: number, address: string } | null) => void
+export interface MapProps {
+    clickedMarker?: Location | undefined
+    setClickedMarker: (location?: Location) => void
     isLoading: boolean
-    mapRef:  React.MutableRefObject<mapboxgl.Map | null>
-    setRefetch: (refetch: boolean) => void
+    onDeleteLocation: () => void
+    onUpdateLocation: (location: Location) => void
+    showSuccessModal: boolean
+    setShowSuccessModal: (showSuccessModal: boolean) => void
+    showEditForm: boolean
+    setShowEditForm: (showEditForm: boolean) => void
 }

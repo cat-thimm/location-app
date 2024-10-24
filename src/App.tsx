@@ -35,6 +35,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
 import {useEffect} from "react";
 import {initializeStorage} from "./helpers/storage";
+import {MapboxProvider} from "./provider/mapbox-provider";
 
 setupIonicReact();
 
@@ -47,7 +48,9 @@ const App = () => {
         <IonReactRouter>
             <IonRouterOutlet>
                 <Route exact path="/home">
-                    <HomeContainer/>
+                    <MapboxProvider containerId="map">
+                        <HomeContainer/>
+                    </MapboxProvider>
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/home"/>

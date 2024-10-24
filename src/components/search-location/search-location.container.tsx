@@ -1,16 +1,18 @@
 import {useState} from "react";
 
 import {Location} from "../../types/location";
+import {useMapbox} from "../../hooks/use-mapbox";
 
-import {SearchLocation} from "./search-location.markup";
-import {SearchLocationContainerProps} from "./search-location.types";
 import {LocationTypes} from "../add-location/add-location.types";
 
-export const SearchLocationContainer = ({locations, mapRef, activeFilters, setActiveFilters}: SearchLocationContainerProps) => {
-    let [results, setResults] = useState<Location[]>([]);
+import {SearchLocation} from "./search-location.markup";
+
+export const SearchLocationContainer = () => {
+    const {setActiveFilters, activeFilters, mapRef, locations} = useMapbox()
+
+    const [results, setResults] = useState<Location[]>([]);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [showFilterMenu, setShowFilterMenu] = useState(false);
-
 
     const handleInput = (ev: Event) => {
         let query = '';
@@ -35,7 +37,6 @@ export const SearchLocationContainer = ({locations, mapRef, activeFilters, setAc
             setIsPopoverOpen(false);
         }
     }
-
 
     const handleFilterApply = (selectedFilters: LocationTypes[]) => {
         setActiveFilters(selectedFilters);

@@ -1,39 +1,20 @@
 import mapboxgl from "mapbox-gl";
 
+import {Location} from "../../types/location";
+
 export interface IAddLocation {
     latitude: number;
     longitude: number;
     address: string;
 }
 
-export interface AddLocationContainerProps {
-    location: IAddLocation| null
-    mapRef?: React.RefObject<mapboxgl.Map>;
-    setClickedLocation: (location: IAddLocation | null) => void
-    setRefetch: (refetch: boolean) => void
-}
-
 export interface AddLocationProps {
-    menuItems: MenuItem[];
     location: IAddLocation | null;
-    setClickedLocation: (location: IAddLocation | null) => void
-    selectedType: LocationTypes | null;
-    setSelectedType: (type: LocationTypes | null) => void;
-    showDescriptionForm: boolean;
-    setShowDescriptionForm: (showDescriptionForm: boolean) => void;
-    locationName: string;
-    onChangeLocationName: (event: any) => void;
-    locationComment: string;
-    onChangeLocationComment: (event: any) => void;
-    onSaveForm: () => void;
+    locationName: string
+    onSaveForm: (location: Location) => void;
     showSuccessModal: boolean;
     setShowSuccessModal: (showSuccessModal: boolean) => void;
-}
-
-export interface SupportModalProps {
-    locationName: string;
-    dismiss: () => void;
-    isOpen: boolean;
+    setClickedLocation: (location: Location | null) => void;
 }
 
 export interface MenuItem {

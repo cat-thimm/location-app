@@ -34,6 +34,7 @@ export const SearchLocation = ({
                 <IonRow className="row">
                     <IonCol>
                         <IonSearchbar
+                            style={{padding: 0}}
                             animated
                             placeholder="Search for location"
                             onIonInput={handleInput}

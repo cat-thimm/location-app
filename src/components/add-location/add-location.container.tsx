@@ -1,31 +1,28 @@
-import {useEffect, useMemo,  useState} from "react";
-import {IonInputCustomEvent, IonTextareaCustomEvent, TextareaInputEventDetail} from "@ionic/core/dist/types/components";
-import {InputInputEventDetail} from "@ionic/react";
+import {useEffect, useMemo, useState} from "react";
 import mapboxgl from "mapbox-gl";
 
-import {drawMarker} from "../../helpers/mapbox";
 import {storeLocation} from "../../helpers/storage";
-import {MENU_ITEMS} from "../../data/location-menu";
+import {drawMarker} from "../../helpers/mapbox";
+import {useMapbox} from "../../hooks/use-mapbox";
+import {Location} from "../../types/location";
 
 import {AddLocation} from "./add-location.markup";
-import {AddLocationContainerProps, LocationTypes} from "./add-location.types";
 
 
-export const AddLocationContainer = ({location, mapRef, setClickedLocation, setRefetch}: AddLocationContainerProps) => {
-    const [selectedType, setSelectedType] = useState<LocationTypes | null>(null)
-    const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
-    const [locationName, setLocationName] = useState("")
-    const [locationComment, setLocationComment] = useState("")
+export const AddLocationContainer = () => {
+    const {clickedLocation, mapRef, setClickedLocation, setRefetch, setClickedMarker} = useMapbox()
+
     const [showSuccessModal, setShowSuccessModal] = useState(false)
+    const [locationName, setLocationName] = useState("");
 
     // Memoize the marker instance, so it's only created when location or mapRef changes
     const marker = useMemo(() => new mapboxgl.Marker(), []);
 
     useEffect(() => {
         if (mapRef && mapRef.current) {
-            if (location) {
+            if (clickedLocation) {
                 marker
-                    .setLngLat({lat: location.latitude, lon: location.longitude})
+                    .setLngLat({lat: clickedLocation.latitude, lon: clickedLocation.longitude})
                     .addTo(mapRef.current);
             } else {
                 marker.remove();
@@ -36,68 +33,30 @@ export const AddLocationContainer = ({location, mapRef, setClickedLocation, setR
         return () => {
             marker.remove()
         };
-    }, [location, mapRef, marker]);
-
-    const onChangeLocationName = (e: IonInputCustomEvent<InputInputEventDetail>) => {
-        if (e.detail.value) {
-            setLocationName(e.detail.value)
-        }
-    }
-
-    const onChangeLocationComment = (e: IonTextareaCustomEvent<TextareaInputEventDetail>) => {
-        if (e.detail.value) {
-            setLocationComment(e.detail.value)
-        }
-    }
+    }, [clickedLocation, mapRef, marker]);
 
 
-    const onSaveForm = async (): Promise<void> => {
-        if (mapRef?.current && selectedType !== null && location !== null) {
-            drawMarker(mapRef?.current, {
-                coordinates: {lat: location.latitude, lon: location.longitude},
-                properties: {title: locationName, comment: locationComment, locationType: selectedType},
-            })
+    const onSaveForm = async (location: Location): Promise<void> => {
+        if (mapRef?.current) {
+            drawMarker(mapRef?.current, location, setClickedMarker)
 
-            await storeLocation({
-                id: Math.random().toString(),
-                type: selectedType,
-                description: locationComment,
-                latitude: location.latitude,
-                longitude: location.longitude,
-                address: location.address,
-                name: locationName,
-                visitDate: new Date().toLocaleDateString(),
-            })
+            await storeLocation(location)
 
             // set flag to refetch locations
             setRefetch(true)
 
-            // Reset Form and Location
-            setClickedLocation(null)
-            setSelectedType(null)
-            setLocationName("")
-            setLocationComment("")
-            setShowDescriptionForm(false)
-
+            setLocationName(location.name)
             // show successModal
             setShowSuccessModal(true)
         }
     }
 
-    return <AddLocation menuItems={MENU_ITEMS}
-                        location={location}
-                        selectedType={selectedType}
-                        setSelectedType={setSelectedType}
-                        showDescriptionForm={showDescriptionForm}
-                        setShowDescriptionForm={setShowDescriptionForm}
-                        locationName={locationName}
-                        onChangeLocationName={onChangeLocationName}
-                        locationComment={locationComment}
-                        onChangeLocationComment={onChangeLocationComment}
+    return <AddLocation location={clickedLocation}
                         onSaveForm={onSaveForm}
-                        setClickedLocation={setClickedLocation}
                         showSuccessModal={showSuccessModal}
                         setShowSuccessModal={setShowSuccessModal}
+                        locationName={locationName}
+                        setClickedLocation={setClickedLocation}
     />
 
 }
