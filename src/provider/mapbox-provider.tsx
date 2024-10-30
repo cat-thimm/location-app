@@ -86,10 +86,16 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         }
     }, [rebuildMap]);
 
+    const filterLocationsByActiveFilters = (locations: Location[]) => {
+        return locations.filter(location => activeFilters.includes(location.type as LocationTypes));
+    };
+
     async function setupMap() {
         setIsLoading(true);
         mapRef.current = await getMap(containerId);
         const fetchedLocations = await getAllLocations();
+
+        const filteredLocations = filterLocationsByActiveFilters(fetchedLocations.locations);
 
         const map = mapRef.current;
         if (map) {
@@ -134,7 +140,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
                         'type': 'geojson',
                         'data': {
                             'type': 'FeatureCollection',
-                            'features': fetchedLocations.locations.map(location => ({
+                            'features': filteredLocations.map(location => ({
                                 'type': 'Feature',
                                 'geometry': {
                                     'type': 'Point',
