@@ -18,6 +18,7 @@ export const MapContainer = () => {
         if (clickedMarker) {
             setIsLoading(true)
             setRefetch(true)
+            setRebuildMap(true)
             setShowSuccessModal(true)
             await deleteLocation(clickedMarker.id)
             setClickedMarker(undefined)

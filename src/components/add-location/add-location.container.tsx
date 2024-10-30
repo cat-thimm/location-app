@@ -2,7 +2,6 @@ import {useEffect, useMemo, useState} from "react";
 import mapboxgl from "mapbox-gl";
 
 import {storeLocation} from "../../helpers/storage";
-import {drawMarker} from "../../helpers/mapbox";
 import {useMapbox} from "../../hooks/use-mapbox";
 import {Location} from "../../types/location";
 
@@ -10,7 +9,7 @@ import {AddLocation} from "./add-location.markup";
 
 
 export const AddLocationContainer = () => {
-    const {clickedLocation, mapRef, setClickedLocation, setRefetch, setClickedMarker} = useMapbox()
+    const {clickedLocation, mapRef, setClickedLocation, setRefetch, setRebuildMap} = useMapbox()
 
     const [showSuccessModal, setShowSuccessModal] = useState(false)
     const [locationName, setLocationName] = useState("");
@@ -38,13 +37,11 @@ export const AddLocationContainer = () => {
 
     const onSaveForm = async (location: Location): Promise<void> => {
         if (mapRef?.current) {
-            drawMarker(mapRef?.current, location, setClickedMarker)
-
             await storeLocation(location)
 
             // set flag to refetch locations
             setRefetch(true)
-
+            setRebuildMap(true)
             setLocationName(location.name)
             // show successModal
             setShowSuccessModal(true)

@@ -17,12 +17,6 @@ export const deleteLocation = async (locationId: string) => {
         (location) => location.id !== locationId
     );
 
-    const marker = document.getElementById(locationId)
-
-    if (marker) {
-        marker.remove()
-    }
-
     // Update the mapData in storage
     await Preferences.set({
         key: "mapData",
