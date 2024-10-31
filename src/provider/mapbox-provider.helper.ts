@@ -1,11 +1,3 @@
-import {Preferences} from "@capacitor/preferences";
-import mapboxgl from 'mapbox-gl';
-
-import {LocationTypes} from "../components/add-location/add-location.types";
-import {drawMarker} from "../helpers/mapbox";
-import {Location} from "../types/location";
-import {getAllLocations} from "../helpers/storage";
-
 /**
  * Function to get the address from coordinates using the Mapbox Geocoding API.
  *

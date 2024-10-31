@@ -5,10 +5,16 @@ import {createMarkerElement, getMap} from "../helpers/mapbox";
 import {LocationTypes} from "../components/add-location/add-location.types";
 import {Location} from "../types/location";
 import {getAllLocations} from "../helpers/storage";
+import "../style.css";
 
 import {MapboxContext} from "./mapbox-provider.context";
-import "../style.css";
 import {getAddressFromCoordinates} from "./mapbox-provider.helper";
+import {
+    clusterCountConfig,
+    clustersBackgroundConfig,
+    clustersCountBackgroundConfig,
+    clustersSymbolConfig, getLocationSource, unclusteredPointConfig
+} from "./mapbox-provider.config";
 
 const INITIAL_FILTERS = [
     LocationTypes.RESTAURANT,
@@ -92,12 +98,14 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
     async function setupMap() {
         setIsLoading(true);
+
         mapRef.current = await getMap(containerId);
+        const map = mapRef.current;
+
         const fetchedLocations = await getAllLocations();
 
         const filteredLocations = filterLocationsByActiveFilters(fetchedLocations.locations);
-
-        const map = mapRef.current;
+        
         if (map) {
             // Load custom icons for each LocationType
             const addImages = async () => {
@@ -136,112 +144,17 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
             map.on("load", async () => {
                 if (!map.getSource('locations')) {
-                    map.addSource('locations', {
-                        'type': 'geojson',
-                        'data': {
-                            'type': 'FeatureCollection',
-                            'features': filteredLocations.map(location => ({
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [location.longitude, location.latitude],
-                                },
-                                'properties': {
-                                    'id': location.id,
-                                    'type': location.type,
-                                    'name': location.name,
-                                    'description': location.description,
-                                    'address': location.address,
-                                    'visitDate': location.visitDate,
-                                }
-                            }))
-                        },
-                        'cluster': true,
-                        'clusterRadius': 50,
-                        clusterProperties: {
-                            has_restaurant: ["any", ["==", ["get", "type"], LocationTypes.RESTAURANT], false],
-                            has_touristic: ["any", ["==", ["get", "type"], LocationTypes.TOURISTIC], false],
-                            has_public_facility: ["any", ["==", ["get", "type"], LocationTypes.PUBLIC_FACILITY], false],
-                            has_event: ["any", ["==", ["get", "type"], LocationTypes.EVENT_VENUE], false],
-                            has_custom: ["any", ["==", ["get", "type"], LocationTypes.CUSTOM], false],
+                    map.addSource('locations', getLocationSource(filteredLocations));
 
-                        },
-                    });
-                    map.addLayer({
-                        id: "clusters-background",
-                        type: "circle",
-                        source: "locations",
-                        filter: ["has", "point_count"],
-                        paint: {
-                            "circle-color": [
-                                "case",
-                                ["get", "has_restaurant"], "#7BFFAD", // Background color for restaurant
-                                ["get", "has_touristic"], "#FFE18D", // Background color for touristic
-                                ["get", "has_event"], "#FFA4C4", // Background color for event venue
-                                ["get", "has_public_facility"], "#B1D7FF", // Background color for public facility
-                                ["get", "has_custom"], "#FF9999", // Background color for custom type
-                                "#51bbd6" // Default background color
-                            ],
-                            "circle-radius": 15, // Adjust as needed for spacing
-                        }
-                    });
-                    map.addLayer({
-                        id: 'clusters',
-                        type: 'symbol',
-                        source: 'locations',
-                        filter: ['has', 'point_count'],
-                        layout: {
-                            'icon-image': [
-                                'case',
-                                ['get', 'has_restaurant'], LocationTypes.RESTAURANT,
-                                ['get', 'has_touristic'], LocationTypes.TOURISTIC,
-                                ['get', 'has_public_facility'], LocationTypes.PUBLIC_FACILITY,
-                                ['get', 'has_event'], LocationTypes.EVENT_VENUE,
-                                ['get', 'has_custom'], LocationTypes.CUSTOM,
-                                LocationTypes.PUBLIC_FACILITY // Default icon
-                            ],
-                            'icon-size': 0.25,
-                            'icon-allow-overlap': true,
-                        },
-                    });
-                    map.addLayer({
-                        id: 'clusters-count-bg',
-                        type: 'circle',
-                        source: 'locations',
-                        filter: ['has', 'point_count'],
-                        paint: {
-                            'circle-color': '#E60000',
-                            'circle-radius': 8,
-                            'circle-translate': [-15, -15],
-                        },
-                    });
-                    map.addLayer({
-                        id: 'cluster-count',
-                        type: 'symbol',
-                        source: 'locations',
-                        filter: ['has', 'point_count'],
-                        paint: {
-                            'text-translate': [-15, -15],
-                            'text-color': '#FFFFFF',
-                        },
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                            'text-allow-overlap': true,
-                        },
-                    });
-                    map.addLayer({
-                        id: 'unclustered-point',
-                        type: 'symbol',
-                        source: 'locations',
-                        filter: ['!', ['has', 'point_count']],
-                        layout: {
-                            'icon-image': ["get", "type"],
-                            'icon-size': 0.06,
-                            'icon-allow-overlap': true,
-                        },
-                    });
+                    map.addLayer(clustersBackgroundConfig);
+
+                    map.addLayer(clustersSymbolConfig);
+
+                    map.addLayer(clustersCountBackgroundConfig);
+
+                    map.addLayer(clusterCountConfig);
+
+                    map.addLayer(unclusteredPointConfig);
 
                     const markers: any = {};
                     let markersOnScreen: any = {};
@@ -319,12 +232,10 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
 
                     setClickedLocation({latitude: lat, longitude: lng, address});
 
-
                     setIsLoading(false);
                 });
 
             });
-
 
             setIsLoading(false);
         }
