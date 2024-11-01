@@ -1,11 +1,11 @@
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 
-import {useMapbox} from "../../hooks/use-mapbox";
-import {deleteLocation, updateLocation} from "../../helpers/storage";
-import {Location} from "../../types/location";
+import {useMapbox} from "@/hooks/use-mapbox";
+import {deleteLocation, updateLocation} from "@/helpers/storage";
+import {Location} from "@/types/location";
 
-import './map.styles.css';
 import {Map} from "./map.markup";
+import './map.styles.css';
 
 export const MapContainer = () => {
     const {isLoading, clickedMarker, setClickedMarker, setRefetch, setRebuildMap, setIsLoading} = useMapbox()

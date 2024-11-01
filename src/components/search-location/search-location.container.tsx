@@ -1,7 +1,7 @@
 import {useState} from "react";
 
-import {Location} from "../../types/location";
-import {useMapbox} from "../../hooks/use-mapbox";
+import {Location} from "@/types/location";
+import {useMapbox} from "@/hooks/use-mapbox";
 
 import {LocationTypes} from "../add-location/add-location.types";
 

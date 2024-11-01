@@ -1,4 +1,4 @@
-import {Location} from "../../types/location";
+import {Location} from "@/types/location";
 
 import {LocationTypes} from "../add-location/add-location.types";
 

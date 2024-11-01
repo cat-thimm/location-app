@@ -1,9 +1,12 @@
-import {Menu} from "../menu";
-import {MenuItem} from "../menu-item";
 import {IonIcon, IonInput, IonItem, IonLabel, IonModal, IonTextarea} from "@ionic/react";
 import React from "react";
+
+import {MENU_ITEMS} from "@/data/location-menu";
+
+import {Menu} from "../menu";
+import {MenuItem} from "../menu-item";
+
 import {LocationEditorProps} from "./location-editor.types";
-import {MENU_ITEMS} from "../../data/location-menu";
 
 export const LocationEditor = ({
                                    showDescriptionForm,

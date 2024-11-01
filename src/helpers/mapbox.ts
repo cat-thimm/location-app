@@ -1,10 +1,11 @@
-// Import statements and setup for Mapbox key
 import mapboxgl, {NavigationControl} from 'mapbox-gl';
-import {LocationTypes} from "../components/add-location/add-location.types";
-import {requestLocation} from "./permissions";
-import {Location} from "../types/location";
+
+import {LocationTypes} from "@/components/add-location/add-location.types";
 
 import "../style.css";
+
+import {requestLocation} from "./permissions";
+
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
 // Get the map instance
@@ -36,17 +37,17 @@ export const getMarkerBackgroundColor = (type: LocationTypes) => {
 // Creates custom HTML marker element with specific styling
 export const createMarkerElement = (id: string, type: LocationTypes) => {
     const el = document.createElement("div");
+
     el.className = 'marker';
     el.id = id;
-
     // Define background color based on location type
     el.style.backgroundColor = getMarkerBackgroundColor(type);
-    el.style.backgroundImage = `url('/assets/icons/${type}.svg')`;
-    el.style.backgroundSize = 'cover';
-    el.style.width = '30px';
-    el.style.height = '30px';
-    el.style.borderRadius = '50%';
 
+    const icon = document.createElement("div");
+    icon.style.backgroundImage = `url('/assets/icons/${type}.svg')`;
+    icon.className = 'marker-icon';
+
+    el.appendChild(icon)
 
     return el;
 }

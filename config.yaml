@@ -1,0 +1,50 @@
+platforms:
+  android:
+    versionName: 1.0.0
+    manifest:
+      -
+        file: AndroidManifest.xml
+        target: manifest/application/activity
+        attrs:
+          'android:screenOrientation': unspecified
+      -
+        file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+      -
+        file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+      -
+        file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-feature android:name="android.hardware.location.gps" />
+      -
+        file: AndroidManifest.xml
+        target: manifest/application
+        inject: |
+          <meta-data android:name="com.google.android.geo.API_KEY" android:value=""/>
+  ios:
+    targets:
+      App:
+        version: 1.0.0
+        xcconfig:
+          -
+            file: App/Config.xcconfig
+            set:
+              TARGETED_DEVICE_FAMILY: '1,2'
+        plist:
+          -
+            replace: true
+            entries:
+              -
+                UISupportedInterfaceOrientations:
+                  - UIInterfaceOrientationPortrait
+                  - UIInterfaceOrientationLandscapeLeft
+                  - UIInterfaceOrientationLandscapeRight
+              - NSLocationAlwaysUsageDescription: 'Access location (Always)'
+              - NSLocationWhenInUseUsageDescription: 'Access location (When in use)'
+              - NSLocationAlwaysAndWhenInUseUsageDescription: 'Access location (Always and when in use)'

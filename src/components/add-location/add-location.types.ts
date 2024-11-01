@@ -1,6 +1,6 @@
 import mapboxgl from "mapbox-gl";
 
-import {Location} from "../../types/location";
+import {Location} from "@/types/location";
 
 export interface IAddLocation {
     latitude: number;

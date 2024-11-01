@@ -1,9 +1,10 @@
 import {useEffect, useMemo, useState} from "react";
 import mapboxgl from "mapbox-gl";
 
-import {storeLocation} from "../../helpers/storage";
-import {useMapbox} from "../../hooks/use-mapbox";
-import {Location} from "../../types/location";
+import {useMapbox} from "@/hooks/use-mapbox";
+import {storeLocation} from "@/helpers/storage";
+import {Location} from "@/types/location";
+
 
 import {AddLocation} from "./add-location.markup";
 

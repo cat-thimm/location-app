@@ -1,6 +1,6 @@
 import {Preferences} from "@capacitor/preferences";
 
-import {Location} from "../types/location";
+import {Location} from "@/types/location";
 
 export const getAllLocations = async (): Promise<{ locations: Location[] }> => {
     const {value: mapDataString} = await Preferences.get({key: 'mapData'});
@@ -17,7 +17,6 @@ export const deleteLocation = async (locationId: string) => {
         (location) => location.id !== locationId
     );
 
-    // Update the mapData in storage
     await Preferences.set({
         key: "mapData",
         value: JSON.stringify({locations: updatedLocations}),
@@ -33,7 +32,6 @@ export const updateLocation = async (updatedLocation: Location) => {
         location.id === updatedLocation.id ? updatedLocation : location
     );
 
-    // Update the mapData in storage
     await Preferences.set({
         key: 'mapData',
         value: JSON.stringify({locations: updatedLocations}),

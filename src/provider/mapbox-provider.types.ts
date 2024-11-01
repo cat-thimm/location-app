@@ -1,5 +1,5 @@
-import {LocationTypes} from "../components/add-location/add-location.types";
-import {Location} from "../types/location";
+import {LocationTypes} from "@/components/add-location/add-location.types";
+import {Location} from "@/types/location";
 
 export interface MapboxContextType {
     clickedMarker?: Location;
