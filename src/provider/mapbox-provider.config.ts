@@ -23,14 +23,13 @@ export const getLocationSource = (filteredLocations: Location[]): any => {
             }))
         },
         'cluster': true,
-        'clusterRadius': 50,
+        'clusterRadius': 30,
         clusterProperties: {
             has_restaurant: ["any", ["==", ["get", "type"], LocationTypes.RESTAURANT], false],
             has_touristic: ["any", ["==", ["get", "type"], LocationTypes.TOURISTIC], false],
             has_public_facility: ["any", ["==", ["get", "type"], LocationTypes.PUBLIC_FACILITY], false],
             has_event: ["any", ["==", ["get", "type"], LocationTypes.EVENT_VENUE], false],
             has_custom: ["any", ["==", ["get", "type"], LocationTypes.CUSTOM], false],
-
         },
     }
 }

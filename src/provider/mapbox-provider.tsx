@@ -219,9 +219,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
                             updateMarkers();
                         }
                     });
-
                 }
-
 
                 map.on('click', async (event) => {
                     setIsLoading(true);
