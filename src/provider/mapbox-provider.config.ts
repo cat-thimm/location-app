@@ -1,5 +1,5 @@
-import {LocationTypes} from "../components/add-location/add-location.types";
-import {Location} from "../types/location";
+import {LocationTypes} from "@/components/add-location/add-location.types";
+import {Location} from "@/types/location";
 
 export const getLocationSource = (filteredLocations: Location[]): any => {
     return {
@@ -50,7 +50,7 @@ export const clustersBackgroundConfig: any = {
             ["get", "has_custom"], "#FF9999",
             "#51bbd6" // Default background color
         ],
-        "circle-radius": 15,
+        "circle-radius": 20,
     }
 }
 
@@ -80,6 +80,7 @@ export const clustersCountBackgroundConfig: any = {
     source: 'locations',
     filter: ['has', 'point_count'],
     paint: {
+        'circle-translate': [15, -15],
         'circle-color': '#E60000',
         'circle-radius': 8,
     },
@@ -92,6 +93,7 @@ export const clusterCountConfig: any = {
     filter: ['has', 'point_count'],
     paint: {
         'text-color': '#FFFFFF',
+        'text-translate': [15, -15],
     },
     layout: {
         'text-field': '{point_count_abbreviated}',

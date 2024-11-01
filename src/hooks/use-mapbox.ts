@@ -1,6 +1,6 @@
 import {useContext} from "react";
 
-import {MapboxContext} from "../provider/mapbox-provider.context";
+import {MapboxContext} from "@/provider/mapbox-provider.context";
 
 /**
  * Hook to use the Mapbox context in components.

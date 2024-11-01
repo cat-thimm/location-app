@@ -1,11 +1,10 @@
 import {ReactNode, useEffect, useRef, useState} from "react";
 import mapboxgl, {Marker} from 'mapbox-gl';
 
-import {createMarkerElement, getMap} from "../helpers/mapbox";
-import {LocationTypes} from "../components/add-location/add-location.types";
-import {Location} from "../types/location";
-import {getAllLocations} from "../helpers/storage";
-import "../style.css";
+import {createMarkerElement, getMap} from "@/helpers/mapbox";
+import {LocationTypes} from "@/components/add-location/add-location.types";
+import {Location} from "@/types/location";
+import {getAllLocations} from "@/helpers/storage";
 
 import {MapboxContext} from "./mapbox-provider.context";
 import {getAddressFromCoordinates} from "./mapbox-provider.helper";
@@ -105,7 +104,7 @@ export const MapboxProvider = ({containerId, children}: { containerId: string, c
         const fetchedLocations = await getAllLocations();
 
         const filteredLocations = filterLocationsByActiveFilters(fetchedLocations.locations);
-        
+
         if (map) {
             // Load custom icons for each LocationType
             const addImages = async () => {

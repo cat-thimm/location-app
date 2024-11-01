@@ -1,9 +1,11 @@
-import {MENU_ITEMS} from "../../data/location-menu";
+import {useState} from "react";
+
+import {MENU_ITEMS} from "@/data/location-menu";
+
+import {LocationTypes} from "../add-location/add-location.types";
 
 import {FilterMenu} from "./filter-menu.markup";
 import {FilterMenuContainerProps} from "./filter-menu.types";
-import {useState} from "react";
-import {LocationTypes} from "../add-location/add-location.types";
 
 export const FilterMenuContainer = ({onDismiss, showMenu, onApplyFilter, activeFilters}: FilterMenuContainerProps) => {
     // Track the selected filter options

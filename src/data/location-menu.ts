@@ -1,4 +1,4 @@
-import {LocationTypes, MenuItem} from "../components/add-location/add-location.types";
+import {LocationTypes, MenuItem} from "@/components/add-location/add-location.types";
 
 export const MENU_ITEMS: MenuItem[] = [
     {id: "1", type: LocationTypes.RESTAURANT, title: "Restaurant", description: "Add restaurants, cafes and others."},

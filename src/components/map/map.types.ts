@@ -1,4 +1,4 @@
-import {Location} from "../../types/location";
+import {Location} from "@/types/location";
 
 export interface MapProps {
     clickedMarker?: Location | undefined
