@@ -102,14 +102,3 @@ export const clusterCountConfig: any = {
     },
 }
 
-export const unclusteredPointConfig: any = {
-    id: 'unclustered-point',
-    type: 'symbol',
-    source: 'locations',
-    filter: ['!', ['has', 'point_count']],
-    layout: {
-        'icon-image': ["get", "type"],
-        'icon-size': 0.06,
-        'icon-allow-overlap': true,
-    },
-}
