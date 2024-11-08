@@ -1,3 +1,6 @@
+import mapboxgl from "mapbox-gl";
+import {LocationTypes} from "@/components/add-location/add-location.types";
+
 /**
  * Function to get the address from coordinates using the Mapbox Geocoding API.
  *
@@ -20,4 +23,31 @@ export const getAddressFromCoordinates = async (lng: number, lat: number): Promi
 
     // Return the first address found or null if not found
     return features.length > 0 ? features[0].place_name : "";
+};
+
+
+// Helper function to load custom icons for each LocationType
+export const loadImages = async (map: mapboxgl.Map) => {
+    const images = [
+        { url: `/assets/icons/${LocationTypes.RESTAURANT}.png`, id: LocationTypes.RESTAURANT },
+        { url: `/assets/icons/${LocationTypes.TOURISTIC}.png`, id: LocationTypes.TOURISTIC },
+        { url: `/assets/icons/${LocationTypes.PUBLIC_FACILITY}.png`, id: LocationTypes.PUBLIC_FACILITY },
+        { url: `/assets/icons/${LocationTypes.EVENT_VENUE}.png`, id: LocationTypes.EVENT_VENUE },
+        { url: `/assets/icons/${LocationTypes.CUSTOM}.png`, id: LocationTypes.CUSTOM },
+    ];
+
+    await Promise.all(images.map(({ url, id }) =>
+        new Promise<void>((resolve, reject) => {
+            if (map.hasImage(id)) return resolve();
+
+            map.loadImage(url, (error, image) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    map.addImage(id, image!);
+                    resolve();
+                }
+            });
+        })
+    ));
 };

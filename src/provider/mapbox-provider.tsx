@@ -7,7 +7,7 @@ import { Location } from "@/types/location";
 import { getAllLocations } from "@/helpers/storage";
 
 import { MapboxContext } from "./mapbox-provider.context";
-import { getAddressFromCoordinates } from "./mapbox-provider.helper";
+import {getAddressFromCoordinates, loadImages} from "./mapbox-provider.helper";
 import {
     clusterCountConfig,
     clustersBackgroundConfig,
@@ -103,32 +103,6 @@ export const MapboxProvider = ({ containerId, children }: { containerId: string,
     // Filters locations based on selected filters
     const filterLocationsByActiveFilters = (locations: Location[]) => {
         return locations.filter(location => activeFilters.includes(location.type as LocationTypes));
-    };
-
-    // Helper function to load custom icons for each LocationType
-    const loadImages = async (map: mapboxgl.Map) => {
-        const images = [
-            { url: `/assets/icons/${LocationTypes.RESTAURANT}.png`, id: LocationTypes.RESTAURANT },
-            { url: `/assets/icons/${LocationTypes.TOURISTIC}.png`, id: LocationTypes.TOURISTIC },
-            { url: `/assets/icons/${LocationTypes.PUBLIC_FACILITY}.png`, id: LocationTypes.PUBLIC_FACILITY },
-            { url: `/assets/icons/${LocationTypes.EVENT_VENUE}.png`, id: LocationTypes.EVENT_VENUE },
-            { url: `/assets/icons/${LocationTypes.CUSTOM}.png`, id: LocationTypes.CUSTOM },
-        ];
-
-        await Promise.all(images.map(({ url, id }) =>
-            new Promise<void>((resolve, reject) => {
-                if (map.hasImage(id)) return resolve();
-
-                map.loadImage(url, (error, image) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        map.addImage(id, image!);
-                        resolve();
-                    }
-                });
-            })
-        ));
     };
 
     // Main function to set up the Mapbox map
