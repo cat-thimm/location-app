@@ -26,28 +26,36 @@ export const getAddressFromCoordinates = async (lng: number, lat: number): Promi
 };
 
 
-// Helper function to load custom icons for each LocationType
+/**
+ * Function to load custom icons for each LocationType onto the Mapbox map.
+ *
+ * @param map - The Mapbox map instance
+ * @returns A Promise that resolves once all images are loaded
+ */
 export const loadImages = async (map: mapboxgl.Map) => {
     const images = [
-        { url: `/assets/icons/${LocationTypes.RESTAURANT}.png`, id: LocationTypes.RESTAURANT },
-        { url: `/assets/icons/${LocationTypes.TOURISTIC}.png`, id: LocationTypes.TOURISTIC },
-        { url: `/assets/icons/${LocationTypes.PUBLIC_FACILITY}.png`, id: LocationTypes.PUBLIC_FACILITY },
-        { url: `/assets/icons/${LocationTypes.EVENT_VENUE}.png`, id: LocationTypes.EVENT_VENUE },
-        { url: `/assets/icons/${LocationTypes.CUSTOM}.png`, id: LocationTypes.CUSTOM },
+        {url: `/assets/icons/${LocationTypes.RESTAURANT}.png`, id: LocationTypes.RESTAURANT + "-img"}, // Unexpected behaviour with term 'restaurant', possibly reserved for something, therefore add -img
+        {url: `/assets/icons/${LocationTypes.TOURISTIC}.png`, id: LocationTypes.TOURISTIC},
+        {url: `/assets/icons/${LocationTypes.PUBLIC_FACILITY}.png`, id: LocationTypes.PUBLIC_FACILITY},
+        {url: `/assets/icons/${LocationTypes.EVENT_VENUE}.png`, id: LocationTypes.EVENT_VENUE},
+        {url: `/assets/icons/${LocationTypes.CUSTOM}.png`, id: LocationTypes.CUSTOM},
     ];
 
-    await Promise.all(images.map(({ url, id }) =>
-        new Promise<void>((resolve, reject) => {
-            if (map.hasImage(id)) return resolve();
+    await Promise.all(images.map(({url, id}) => {
+            return new Promise<void>((resolve, reject) => {
+                map.loadImage(url, (error, image) => {
+                    if (error) reject(error);
+                    else if (image) {
+                        if (map.hasImage(id)) {
+                            return resolve();
+                        }
 
-            map.loadImage(url, (error, image) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    map.addImage(id, image!);
-                    resolve();
-                }
-            });
-        })
+                        map.addImage(id, image);
+                        resolve();
+                    }
+                });
+            })
+        }
     ));
+
 };

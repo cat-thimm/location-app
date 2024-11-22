@@ -3,10 +3,10 @@ import {Preferences} from "@capacitor/preferences";
 import {Location} from "@/types/location";
 
 export const getAllLocations = async (): Promise<{ locations: Location[] }> => {
-    const {value: mapDataString} = await Preferences.get({key: 'mapData'});
+    const {value: mapDataString} = await Preferences.get({key: "mapData"});
 
     return mapDataString ? JSON.parse(mapDataString) : {locations: []};
-}
+};
 
 // Delete a location by its id or any unique property
 export const deleteLocation = async (locationId: string) => {
@@ -21,6 +21,8 @@ export const deleteLocation = async (locationId: string) => {
         key: "mapData",
         value: JSON.stringify({locations: updatedLocations}),
     });
+
+    return updatedLocations
 };
 
 // Update a location by its id or any unique property
@@ -33,39 +35,43 @@ export const updateLocation = async (updatedLocation: Location) => {
     );
 
     await Preferences.set({
-        key: 'mapData',
+        key: "mapData",
         value: JSON.stringify({locations: updatedLocations}),
     });
-};
 
+    return updatedLocations
+};
 
 // Store new location in localStorage and update the local json file
 export const storeLocation = async (location: Location) => {
-    const mapData = await getAllLocations()
+    const mapData = await getAllLocations();
 
     mapData.locations.push(location);
 
     await Preferences.set({
-        key: 'mapData',
-        value: JSON.stringify(mapData)
+        key: "mapData",
+        value: JSON.stringify(mapData),
     });
+
+    return mapData.locations;
 };
 
+import initialLocations from "../data/locations.json";
+
 export const initializeStorage = async () => {
-    const {value: isInitialized} = await Preferences.get({key: 'isInitialized'});
+    const {value: isInitialized} = await Preferences.get({
+        key: "isInitialized",
+    });
 
     if (!isInitialized) {
-        const response = await fetch('./src/data/locations.json');
-        const initialData = await response.json();
-
         await Preferences.set({
-            key: 'mapData',
-            value: JSON.stringify(initialData)
+            key: "mapData",
+            value: JSON.stringify(initialLocations),
         });
 
         await Preferences.set({
-            key: 'isInitialized',
-            value: 'true'
+            key: "isInitialized",
+            value: "true",
         });
     }
 };

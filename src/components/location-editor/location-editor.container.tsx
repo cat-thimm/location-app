@@ -10,7 +10,7 @@ import {LocationEditor} from "./location-editor.markup";
 
 export const LocationEditorContainer = ({onSaveLocation, onFormDismiss, location}: LocationEditorContainerProps) => {
     const [showDescriptionForm, setShowDescriptionForm] = useState<boolean>(false)
-        const [selectedType, setSelectedType] = useState<LocationTypes | null>("type" in location ? location?.type as LocationTypes : null)
+    const [selectedType, setSelectedType] = useState<LocationTypes | null>("type" in location ? location?.type as LocationTypes : null)
     const [locationName, setLocationName] = useState("name" in location ? location.name : "")
     const [locationComment, setLocationComment] = useState("description" in location ? location.description : "")
 
@@ -39,7 +39,6 @@ export const LocationEditorContainer = ({onSaveLocation, onFormDismiss, location
         if (selectedType !== null) {
             let newLocation
             if ("visitDate" in location) {
-                console.log(location)
                 // Case Location is edited
                 newLocation = {
                     id: location.id,

@@ -1,14 +1,13 @@
 import React, {useState} from "react";
 
 import {useMapbox} from "@/hooks/use-mapbox";
-import {deleteLocation, updateLocation} from "@/helpers/storage";
 import {Location} from "@/types/location";
 
 import {Map} from "./map.markup";
 import './map.styles.css';
 
 export const MapContainer = () => {
-    const {isLoading, clickedMarker, setClickedMarker, setRefetch, setRebuildMap, setIsLoading} = useMapbox()
+    const {isLoading, clickedMarker, setClickedMarker, updateMarker, deleteMarker} = useMapbox()
 
     const [showSuccessModal, setShowSuccessModal] = useState(false)
     const [showEditForm, setShowEditForm] = useState(false)
@@ -16,24 +15,18 @@ export const MapContainer = () => {
 
     const onDeleteLocation = async () => {
         if (clickedMarker) {
-            setIsLoading(true)
-            setRefetch(true)
-            setRebuildMap(true)
             setShowSuccessModal(true)
-            await deleteLocation(clickedMarker.id)
+            await deleteMarker(clickedMarker.id)
             setClickedMarker(undefined)
-            setIsLoading(false)
         } else {
             console.error("No Marker clicked.")
         }
     }
 
     const onUpdateLocation = async (location: Location): Promise<void> => {
-        await updateLocation(location)
+        await updateMarker(location)
         setClickedMarker(undefined)
         setShowEditForm(false)
-        setRefetch(true)
-        setRebuildMap(true)
     }
 
     return <Map isLoading={isLoading}

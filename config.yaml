@@ -11,22 +11,17 @@ platforms:
         file: AndroidManifest.xml
         target: manifest
         inject: |
-          <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+          <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
       -
         file: AndroidManifest.xml
         target: manifest
         inject: |
-          <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+          <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
       -
         file: AndroidManifest.xml
         target: manifest
         inject: |
-          <uses-feature android:name="android.hardware.location.gps" />
-      -
-        file: AndroidManifest.xml
-        target: manifest/application
-        inject: |
-          <meta-data android:name="com.google.android.geo.API_KEY" android:value=""/>
+          <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   ios:
     targets:
       App:
@@ -45,6 +40,6 @@ platforms:
                   - UIInterfaceOrientationPortrait
                   - UIInterfaceOrientationLandscapeLeft
                   - UIInterfaceOrientationLandscapeRight
-              - NSLocationAlwaysUsageDescription: 'Access location (Always)'
-              - NSLocationWhenInUseUsageDescription: 'Access location (When in use)'
-              - NSLocationAlwaysAndWhenInUseUsageDescription: 'Access location (Always and when in use)'
+              - NSCameraUsageDescription: 'Take photos'
+              - NSPhotoLibraryAddUsageDescription: 'Add photos'
+              - NSPhotoLibraryUsageDescription: 'Access photos'

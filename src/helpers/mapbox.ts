@@ -21,6 +21,11 @@ export const getMap = async (containerId: string) => {
     });
 
     map.addControl(new NavigationControl());
+    map.addControl(
+        new mapboxgl.GeolocateControl({
+            showUserLocation: true,
+        })
+    );
     return map;
 };
 
@@ -34,22 +39,5 @@ export const getMarkerBackgroundColor = (type: LocationTypes) => {
     }[type] || "transparent"
 }
 
-// Creates custom HTML marker element with specific styling
-export const createMarkerElement = (id: string, type: LocationTypes) => {
-    const el = document.createElement("div");
-
-    el.className = 'marker';
-    el.id = id;
-    // Define background color based on location type
-    el.style.backgroundColor = getMarkerBackgroundColor(type);
-
-    const icon = document.createElement("div");
-    icon.style.backgroundImage = `url('/assets/icons/${type}.svg')`;
-    icon.className = 'marker-icon';
-
-    el.appendChild(icon)
-
-    return el;
-}
 
 
